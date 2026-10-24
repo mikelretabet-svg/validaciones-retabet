@@ -1,0 +1,952 @@
+{
+  "meta": {
+    "herramienta": "Validaciones RETABET",
+    "version_contenido": "1.1",
+    "fecha": "2026-10-24",
+    "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
+    "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
+  },
+  "general": {
+    "regla": {
+      "titulo": "Regla general del justificante",
+      "texto": "El justificante que entrega el cliente debe mostrar el nombre del titular y el número de la tarjeta con los 4 primeros y los 4 últimos dígitos visibles y los 8 del medio tapados. El CVV debe estar tapado. Nunca se pide el PIN.",
+      "ejemplo_numero": "1234 •••• •••• 5678",
+      "estado": "aprobado por Mikel (23/10/2026)"
+    },
+    "frase_inicial": {
+      "texto": "Para completar el registro de su tarjeta necesito un justificante de su banco en el que aparezca su nombre como titular y el número de la tarjeta. No necesito el número completo: con los 4 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. Le indico cómo obtenerlo en su app.",
+      "estado": "propuesta"
+    },
+    "entrega": {
+      "texto": "El cliente envía el justificante por correo electrónico o por el chat habitual. Indícale la dirección y pídele que, antes de enviarlo, tape los 8 dígitos centrales y el CVV si aparecen.",
+      "direccion": "info@retabet.es",
+      "nota_interna": "Propuesta: info@retabet.es es el buzón compartido de SAC al que ya llega documentación de clientes. Confirmar con Compliance que es el canal autorizado para este justificante y si en tienda se usa otro.",
+      "estado": "propuesta"
+    },
+    "verificacion": {
+      "titulo": "Qué compruebas antes de dar por válido el justificante",
+      "items": [
+        "El nombre del titular coincide con el documento de identidad del cliente.",
+        "Se ven los 4 primeros y los 4 últimos dígitos del número de tarjeta; los 8 del medio están tapados.",
+        "No se ve el CVV. Si se ve, pide al cliente que lo tape y lo reenvíe.",
+        "El justificante es de la app o web real del banco (cabecera, logotipo), no un recorte sin contexto."
+      ],
+      "estado": "items 1-3 derivados de la regla aprobada; item 4 propuesta"
+    },
+    "registro": {
+      "texto": "Anota en el sistema habitual que la titularidad queda acreditada, indicando banco y los 4 últimos dígitos de la tarjeta. No copies el número completo en ningún sitio. Si no sabes dónde registrarlo, consulta a SAC.",
+      "nota_interna": "PENDIENTE: nombre del sistema donde se registra y campo exacto. Claude no lo conoce.",
+      "estado": "propuesta incompleta"
+    },
+    "archivo": {
+      "texto": "El justificante se archiva según el procedimiento interno de protección de datos y se elimina cumplido el plazo de conservación. No lo guardes en el móvil ni en el equipo de la tienda.",
+      "nota_interna": "Propuesta de plazo: 2 meses, alineado con la retención en estudio para info@retabet.es. Confirmar con DPO.",
+      "estado": "propuesta"
+    },
+    "escalado": {
+      "texto": "Si no puedes completar el procedimiento, abre incidencia a SAC por el canal habitual (sac@ekasa.net) indicando tienda, banco y motivo. No improvises pasos que no estén en la ficha.",
+      "estado": "propuesta"
+    }
+  },
+  "bancos": [
+    {
+      "id": "santander",
+      "nombre": "Santander",
+      "alias": [
+        "banco santander",
+        "santander"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "En la pantalla «Detalle de tarjeta» hay un enlace «Ver Nº tarjeta, CVV y caducidad». El cliente NO debe pulsarlo: el número aparece ya con los últimos 4 dígitos.",
+      "pasos": [
+        {
+          "titulo": "Abre la app del Santander",
+          "detalle": "Desde su dispositivo móvil.",
+          "captura": null
+        },
+        {
+          "titulo": "Introduce la clave de acceso a la app",
+          "detalle": "Es la clave de la app, no el PIN de la tarjeta.",
+          "captura": null
+        },
+        {
+          "titulo": "Baja hasta el apartado «Tarjetas»",
+          "detalle": "En la pantalla de inicio.",
+          "captura": null
+        },
+        {
+          "titulo": "Pulsa la tarjeta que quiere registrar",
+          "detalle": null,
+          "captura": null
+        },
+        {
+          "titulo": "Pulsa «Ver detalle tarjeta»",
+          "detalle": null,
+          "captura": "santander/1.jpg"
+        },
+        {
+          "titulo": "Haz una captura de la pantalla «Detalle de tarjeta»",
+          "detalle": "Sin pulsar «Ver Nº tarjeta, CVV y caducidad».",
+          "captura": "santander/2.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura «Detalle de tarjeta»",
+        "descripcion": "Muestra el número con los 4 últimos dígitos (•••• •••• 1396), alias, límites, titular, beneficiario y cuenta de cargo.",
+        "captura": "santander/2.jpg"
+      },
+      "verificacion_extra": [],
+      "faq": [
+        {
+          "p": "«No me sale “Ver detalle tarjeta”»",
+          "r": "Compruebe que ha pulsado sobre la tarjeta, no sobre la cuenta. El botón está en la fila de iconos bajo la tarjeta.",
+          "interno": "Si la pantalla no coincide con la guía, usa «No se puede completar».",
+          "estado": "propuesta"
+        }
+      ],
+      "publicado": true
+    },
+    {
+      "id": "bbva",
+      "nombre": "BBVA",
+      "alias": [
+        "bbva"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "La pantalla de detalle muestra el PAN enmascarado y un botón «Copiar». El cliente no debe copiar ni desenmascarar el número.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de tus productos",
+          "detalle": "En la pantalla de inicio, parte superior («Tus productos»).",
+          "captura": "bbva/1.jpg"
+        },
+        {
+          "titulo": "Elige la tarjeta que quiere registrar",
+          "detalle": null,
+          "captura": "bbva/2.jpg"
+        },
+        {
+          "titulo": "Pulsa de nuevo sobre la tarjeta seleccionada",
+          "detalle": "Se abre el detalle con los datos de la tarjeta.",
+          "captura": "bbva/3.jpg"
+        },
+        {
+          "titulo": "Haz una captura de la pantalla de detalle",
+          "detalle": "Debe verse el nombre impreso en la tarjeta y el PAN enmascarado.",
+          "captura": "bbva/4.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura del detalle de la tarjeta",
+        "descripcion": "Alias, tipo, formato, PAN enmascarado, validez y nombre del titular sobre la imagen de la tarjeta.",
+        "captura": "bbva/4.jpg"
+      },
+      "verificacion_extra": [],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "caixabank",
+      "nombre": "Caixabank",
+      "alias": [
+        "la caixa",
+        "caixa",
+        "caixabanknow"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "La guía lleva al cliente a la opción «Número de la tarjeta (PAN)», que muestra el número COMPLETO tras la firma electrónica. En el mismo menú están «Consultar caducidad y CVV» y «Consultar PIN»: no debe pulsarlos. Antes de enviar la captura, el cliente debe tapar los 8 dígitos centrales.",
+      "pasos": [
+        {
+          "titulo": "Abre la app de CaixaBank",
+          "detalle": "Desde su dispositivo móvil.",
+          "captura": null
+        },
+        {
+          "titulo": "Introduce la clave de acceso a la app",
+          "detalle": null,
+          "captura": null
+        },
+        {
+          "titulo": "Baja hasta el apartado «Tarjetas»",
+          "detalle": "En la pantalla de inicio.",
+          "captura": "caixabank/1.jpg"
+        },
+        {
+          "titulo": "Pulsa la tarjeta y después «Mostrar más»",
+          "detalle": null,
+          "captura": "caixabank/2.jpg"
+        },
+        {
+          "titulo": "Pulsa «Datos y gestión de tarjeta»",
+          "detalle": null,
+          "captura": "caixabank/3.jpg"
+        },
+        {
+          "titulo": "Pulsa «Número de la tarjeta (PAN)»",
+          "detalle": "Pide la firma electrónica y muestra la numeración completa.",
+          "captura": "caixabank/4.jpg"
+        },
+        {
+          "titulo": "Haz una captura y tapa los 8 dígitos centrales antes de enviarla",
+          "detalle": null,
+          "captura": null
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Datos y gestión de tarjeta» con el número",
+        "descripcion": "La guía no indica si en esta pantalla aparece el nombre del titular. Si no aparece, consulta a SAC.",
+        "captura": "caixabank/4.jpg"
+      },
+      "verificacion_extra": [
+        "Confirma que el cliente ha tapado los 8 dígitos centrales. Si llega el número completo, pídele que lo reenvíe tapado y no reenvíes tú la captura."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "caja-rural",
+      "nombre": "Caja Rural",
+      "alias": [
+        "rural kutxa",
+        "ruralvia",
+        "caja rural de navarra",
+        "rural"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "La pantalla de información tiene el enlace «Consultar número de tarjeta y CVV». El cliente NO debe pulsarlo: el número ya aparece con los últimos 4 dígitos. La app aparece como «Rural Kutxa» en las capturas.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de tarjetas",
+          "detalle": "En la pantalla de inicio, parte inferior.",
+          "captura": "caja-rural/1.jpg"
+        },
+        {
+          "titulo": "Pulsa la tarjeta que quiere registrar",
+          "detalle": null,
+          "captura": "caja-rural/2.jpg"
+        },
+        {
+          "titulo": "Se abre «Información de la tarjeta»",
+          "detalle": "Muestra titular, cuenta asociada y caducidad.",
+          "captura": "caja-rural/3.jpg"
+        },
+        {
+          "titulo": "Haz una captura de esta pantalla",
+          "detalle": null,
+          "captura": null
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Información de la tarjeta»",
+        "descripcion": "Titular, alias, cuenta asociada, caducidad y número con los 4 últimos dígitos (*0592).",
+        "captura": "caja-rural/3.jpg"
+      },
+      "verificacion_extra": [],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "kutxabank",
+      "nombre": "Kutxabank",
+      "alias": [
+        "kutxa",
+        "kutxabank",
+        "bbk",
+        "kutxabank es"
+      ],
+      "familia": "documento",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "El último paso salta de la app a la banca online (kutxabank.es). El cliente descarga un PDF, no una captura.",
+      "pasos": [
+        {
+          "titulo": "Entra en la app y pulsa «Tarjetas»",
+          "detalle": null,
+          "captura": "kutxabank/1.jpg"
+        },
+        {
+          "titulo": "Pulsa el botón rojo «+»",
+          "detalle": "Abre las opciones disponibles.",
+          "captura": "kutxabank/2.jpg"
+        },
+        {
+          "titulo": "Pulsa «Otras operaciones»",
+          "detalle": "En la pantalla siguiente, pulsa de nuevo «Otras operaciones». La app abre la banca online clásica.",
+          "captura": "kutxabank/3.jpg"
+        },
+        {
+          "titulo": "Marca «Tarjeta» y después «Titulares y autorizados»",
+          "detalle": "En la pestaña «Consultas» de kutxabank.es.",
+          "captura": "kutxabank/4.jpg"
+        },
+        {
+          "titulo": "Descarga el justificante en PDF",
+          "detalle": "Comprueba que se ha descargado correctamente antes de enviarlo.",
+          "captura": null
+        }
+      ],
+      "resultado": {
+        "titulo": "PDF «Titulares y autorizados»",
+        "descripcion": "Documento emitido por el banco. La guía no detalla su contenido. NO ESPECIFICADO EN LA DOCUMENTACIÓN si incluye el número de tarjeta completo.",
+        "captura": null
+      },
+      "verificacion_extra": [
+        "Si el PDF muestra el número completo, aplica la regla general: pide al cliente que lo tape o acepta solo si los 8 centrales están ocultos."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "laboral-kutxa",
+      "nombre": "Laboral Kutxa",
+      "alias": [
+        "laboral",
+        "lk",
+        "caja laboral",
+        "euskadiko kutxa"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "En «Detalle de la tarjeta» hay una opción «PIN · Consultar». El cliente no debe pulsarla.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de tarjetas",
+          "detalle": "En la pantalla de inicio, parte inferior.",
+          "captura": "laboral-kutxa/1.jpg"
+        },
+        {
+          "titulo": "Elige la tarjeta y pulsa «Más detalle»",
+          "detalle": null,
+          "captura": "laboral-kutxa/2.jpg"
+        },
+        {
+          "titulo": "Pulsa «Usuarios de la tarjeta»",
+          "detalle": null,
+          "captura": "laboral-kutxa/3.jpg"
+        },
+        {
+          "titulo": "Haz una captura de «Usuarios de la tarjeta»",
+          "detalle": "Aparece el nombre del titular, su identificación (DNI) y la numeración.",
+          "captura": "laboral-kutxa/4.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Usuarios de la tarjeta»",
+        "descripcion": "Nombre, identificación (DNI), relación «Titular» y numeración de la tarjeta. NO ESPECIFICADO EN LA DOCUMENTACIÓN si la numeración aparece completa.",
+        "captura": "laboral-kutxa/4.jpg"
+      },
+      "verificacion_extra": [
+        "Si la numeración aparece completa, el cliente debe tapar los 8 dígitos centrales."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "sabadell",
+      "nombre": "Sabadell",
+      "alias": [
+        "banco sabadell",
+        "banc sabadell",
+        "bs"
+      ],
+      "familia": "captura",
+      "estado": "provisional",
+      "provisional": true,
+      "aviso_provisional": "Guía provisional: sin capturas y sin resultado definido en la documentación. Si la pantalla del cliente no coincide, usa «No se puede completar».",
+      "aviso_especifico": "La guía describe cómo ver el número completo, la caducidad y el CVV, y añade un paso para ver el PIN. El PIN NO se pide en ningún caso. El cliente debe tapar los 8 dígitos centrales y el CVV antes de enviar la captura. La propia guía avisa de que en algunos dispositivos la pantalla no permite captura.",
+      "pasos": [
+        {
+          "titulo": "Abre la app de Banco Sabadell e inicia sesión",
+          "detalle": "Con usuario y contraseña, huella o Face ID.",
+          "captura": null
+        },
+        {
+          "titulo": "Ve a la sección «Tarjetas»",
+          "detalle": "En la pantalla principal o en el menú.",
+          "captura": null
+        },
+        {
+          "titulo": "Pulsa la tarjeta que quiere registrar",
+          "detalle": null,
+          "captura": null
+        },
+        {
+          "titulo": "Pulsa «Ver Detalles» (o «Detalles de la tarjeta» / «Ver datos»)",
+          "detalle": "Muestra número completo, fecha de caducidad y CVV de forma temporal.",
+          "captura": null
+        },
+        {
+          "titulo": "Haz una captura y tapa los 8 dígitos centrales y el CVV antes de enviarla",
+          "detalle": "El PIN no se consulta: no acredita titularidad.",
+          "captura": null
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Ver Detalles» con datos tapados",
+        "descripcion": "La guía no indica si en esa pantalla aparece el nombre del titular ni qué debe entregarse. Si no aparece el nombre, consulta a SAC.",
+        "captura": null
+      },
+      "verificacion_extra": [
+        "Confirma que CVV y 8 dígitos centrales están tapados. Si no aparece el nombre del titular, usa «No se puede completar»."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "bankinter",
+      "nombre": "Bankinter",
+      "alias": [
+        "bk",
+        "bankinter"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": null,
+      "pasos": [
+        {
+          "titulo": "Entra en «Mi Posición Global» y localiza la tarjeta",
+          "detalle": "En la pantalla de inicio de la app.",
+          "captura": "bankinter/1.jpg"
+        },
+        {
+          "titulo": "Pulsa la tarjeta dos veces",
+          "detalle": "Con una pulsación se abren los movimientos; con la segunda, el «Detalle de tarjeta».",
+          "captura": null
+        },
+        {
+          "titulo": "Haz una captura de «Detalle de tarjeta»",
+          "detalle": "Debe verse número (****9350), caducidad y titular.",
+          "captura": "bankinter/2.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Detalle de tarjeta»",
+        "descripcion": "Número con los 4 últimos dígitos, caducidad, modalidad de pago, titular y cuenta asociada.",
+        "captura": "bankinter/2.jpg"
+      },
+      "verificacion_extra": [],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "ing",
+      "nombre": "ING",
+      "alias": [
+        "ing direct",
+        "ing"
+      ],
+      "familia": "documento",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "El desplegable de la tarjeta incluye «Fecha de caducidad y CVV» y «Copiar/Compartir número». El cliente solo debe usar «Extractos y certificados».",
+      "pasos": [
+        {
+          "titulo": "Pulsa la tarjeta en la pantalla de inicio",
+          "detalle": "Se abre un desplegable con opciones.",
+          "captura": "ing/1.jpg"
+        },
+        {
+          "titulo": "Elige «Extractos y certificados» y pulsa «Consultar»",
+          "detalle": null,
+          "captura": "ing/2.jpg"
+        },
+        {
+          "titulo": "Se genera el «Certificado de Titularidad de Tarjeta»",
+          "detalle": "Guárdalo o haz una captura completa del certificado.",
+          "captura": "ing/4.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Certificado de Titularidad de Tarjeta (ING)",
+        "descripcion": "Documento oficial con tarjeta, estado, IBAN asociado, nombre y apellidos y NIF/NIE, firmado por apoderados. NO ESPECIFICADO si el número de tarjeta aparece completo.",
+        "captura": "ing/4.jpg"
+      },
+      "verificacion_extra": [
+        "Si el certificado muestra el número completo, el cliente debe tapar los 8 dígitos centrales."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "openbank",
+      "nombre": "Openbank",
+      "alias": [
+        "open",
+        "openbank"
+      ],
+      "familia": "captura",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "La pantalla «Información de tarjeta» muestra el número como «… XXXX» con un enlace «Consultar»: el cliente no debe pulsarlo. En esa pantalla NO aparece el nombre del titular; aparece en la pantalla anterior, sobre la imagen de la tarjeta («Tarjeta de débito | Titular»). Pendiente de decidir qué captura se pide.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de tarjeta",
+          "detalle": "En la pantalla de inicio, parte inferior.",
+          "captura": "openbank/1.jpg"
+        },
+        {
+          "titulo": "Elige la tarjeta y pulsa «Más opciones»",
+          "detalle": null,
+          "captura": "openbank/3.jpg"
+        },
+        {
+          "titulo": "Pulsa «Detalle de tarjeta»",
+          "detalle": null,
+          "captura": "openbank/4.jpg"
+        },
+        {
+          "titulo": "Haz una captura de la pantalla",
+          "detalle": null,
+          "captura": "openbank/5.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Captura de «Información de tarjeta»",
+        "descripcion": "Nombre de la tarjeta, tipo, número «… XXXX» y fecha de validez. Sin nombre del titular en la captura final de la guía.",
+        "captura": "openbank/5.jpg"
+      },
+      "verificacion_extra": [
+        "Si la captura no muestra el nombre del titular, pide también la pantalla anterior donde aparece «Titular» sobre la tarjeta. Si hay dudas, consulta a SAC."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "imagin",
+      "nombre": "Imagin",
+      "alias": [
+        "imaginbank",
+        "imagin bank",
+        "imagín"
+      ],
+      "familia": "asincrono",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "El certificado no se obtiene al momento: Imagin llama al cliente (en las siguientes 24 h laborables según la app) y gestiona el certificado. El cliente no sale de la tienda con el justificante.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de ayuda «?»",
+          "detalle": "Arriba a la izquierda en la app de Imagin.",
+          "captura": "imagin/1.jpg"
+        },
+        {
+          "titulo": "Escribe «titularidad» y pulsa «Solicitar certificado de titularidad»",
+          "detalle": null,
+          "captura": "imagin/2.jpg"
+        },
+        {
+          "titulo": "Pulsa «¿Necesitas otro tipo de certificado?»",
+          "detalle": null,
+          "captura": "imagin/3.jpg"
+        },
+        {
+          "titulo": "Marca «Titularidad de la tarjeta» y pulsa «Continuar»",
+          "detalle": null,
+          "captura": "imagin/4.jpg"
+        },
+        {
+          "titulo": "Programa la llamada",
+          "detalle": "Elige franja horaria y acepta las condiciones. Imagin te llamará para generar el certificado.",
+          "captura": "imagin/5.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Certificado de titularidad de la tarjeta (tras la llamada)",
+        "descripcion": "Documento emitido por Imagin. Contenido y formato NO ESPECIFICADOS EN LA DOCUMENTACIÓN.",
+        "captura": null
+      },
+      "verificacion_extra": [
+        "Al recibirlo, aplica la regla general (nombre, 4+4 dígitos, sin CVV)."
+      ],
+      "faq": [
+        {
+          "p": "«¿Y mientras tanto qué pasa con mi tarjeta?»",
+          "r": "Lo gestionamos con nuestro servicio de atención y le informamos. Cuando reciba el certificado, envíenoslo y completamos el registro.",
+          "interno": "Consulta a SAC cómo queda la solicitud mientras tanto.",
+          "estado": "consulta a SAC"
+        }
+      ],
+      "publicado": true
+    },
+    {
+      "id": "n26",
+      "nombre": "N26",
+      "alias": [
+        "n 26",
+        "n26"
+      ],
+      "familia": "documento",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "Se hace desde la web de N26, no desde la app. La guía indica marcar también «Saldo actual de mi cuenta»; ese dato no se necesita: basta «Número de mis tarjetas activas». Si el banco exige las dos casillas, márcalas y consulta a SAC.",
+      "pasos": [
+        {
+          "titulo": "Entra en la web de N26 y pulsa el icono de descargas",
+          "detalle": "En la pantalla de inicio.",
+          "captura": "n26/1.jpg"
+        },
+        {
+          "titulo": "Baja hasta «Confirmación de cuenta» y marca las casillas",
+          "detalle": "Pulsa «Solicitar».",
+          "captura": "n26/2.jpg"
+        },
+        {
+          "titulo": "Recibe el certificado",
+          "detalle": "Llega un SMS/aviso de la app con el certificado en PDF.",
+          "captura": null
+        }
+      ],
+      "resultado": {
+        "titulo": "Certificado de confirmación de cuenta y tarjetas activas (PDF)",
+        "descripcion": "Documento emitido por N26. NO ESPECIFICADO si el número de tarjeta aparece completo.",
+        "captura": null
+      },
+      "verificacion_extra": [
+        "Si el PDF muestra el número completo, el cliente debe tapar los 8 dígitos centrales."
+      ],
+      "faq": [],
+      "publicado": true
+    },
+    {
+      "id": "revolut",
+      "nombre": "Revolut",
+      "alias": [
+        "revo",
+        "revolut"
+      ],
+      "familia": "documento",
+      "estado": "aprobado-fase1",
+      "provisional": false,
+      "aviso_especifico": "Según la propia app, el documento descargado incluye el número de tarjeta COMPLETO, la fecha de validez y el CVV. El cliente debe tapar los 8 dígitos centrales y el CVV antes de enviarlo.",
+      "pasos": [
+        {
+          "titulo": "Pulsa el icono de tarjetas",
+          "detalle": "En la pantalla de inicio, arriba a la derecha.",
+          "captura": "revolut/1.jpg"
+        },
+        {
+          "titulo": "Elige la tarjeta que quiere registrar",
+          "detalle": null,
+          "captura": "revolut/2.jpg"
+        },
+        {
+          "titulo": "Pulsa el icono de ayuda «?»",
+          "detalle": "Esquina superior derecha.",
+          "captura": "revolut/3.jpg"
+        },
+        {
+          "titulo": "Pulsa «¿Cómo puedo verificar que esta tarjeta me pertenece?»",
+          "detalle": "Segunda opción del menú de ayuda.",
+          "captura": "revolut/4.jpg"
+        },
+        {
+          "titulo": "Pulsa «Descargar documento» y tapa los 8 dígitos centrales y el CVV antes de enviarlo",
+          "detalle": null,
+          "captura": "revolut/5.jpg"
+        }
+      ],
+      "resultado": {
+        "titulo": "Documento de confirmación de la tarjeta (Revolut)",
+        "descripcion": "Incluye número de tarjeta, fecha de validez, CVV e información de la cuenta, según la app.",
+        "captura": "revolut/5.jpg"
+      },
+      "verificacion_extra": [
+        "Confirma que CVV y 8 dígitos centrales están tapados. Si llega sin tapar, pide al cliente que lo reenvíe tapado y no reenvíes tú el documento."
+      ],
+      "faq": [],
+      "publicado": true
+    }
+  ],
+  "situaciones": [
+    {
+      "id": "sin-app",
+      "titulo": "El cliente no tiene la app ni acceso a banca online",
+      "cliente": "Sin acceso a su banca digital no podemos obtener el justificante ahora. Puede activarla con su banco o traer un certificado de titularidad de la tarjeta emitido por su oficina.",
+      "interno": "Abre incidencia a SAC (sac@ekasa.net) indicando tienda, banco y «cliente sin banca digital». Consulta a SAC si el certificado de la oficina bancaria es alternativa aceptada.",
+      "estado": "propuesta"
+    },
+    {
+      "id": "pantalla-distinta",
+      "titulo": "La pantalla de su app no coincide con la guía",
+      "cliente": "Las apps cambian con las actualizaciones. Busque la opción de detalle o datos de la tarjeta; si no la encuentra, lo consultamos y le avisamos.",
+      "interno": "No improvises. Anota banco y, si puedes, versión de la app, y comunícalo a SAC para actualizar la ficha.",
+      "estado": "propuesta"
+    },
+    {
+      "id": "no-cumple",
+      "titulo": "El justificante no cumple la regla (faltan dígitos, se ve el CVV, no aparece el nombre)",
+      "cliente": "Necesito que el justificante muestre su nombre y el número de la tarjeta con los 4 primeros y los 4 últimos dígitos visibles, el resto y el CVV tapados. ¿Puede repetirlo?",
+      "interno": "No aceptes ni reenvíes un justificante con el número completo o el CVV visible.",
+      "estado": "derivado de la regla aprobada"
+    },
+    {
+      "id": "banco-no-listado",
+      "titulo": "El banco del cliente no está en la lista",
+      "cliente": "Para su banco no tenemos aún el procedimiento. Lo consultamos y le indicamos cómo obtener el justificante.",
+      "interno": "No existe procedimiento validado. Abre incidencia a SAC con el nombre del banco.",
+      "estado": "propuesta"
+    },
+    {
+      "id": "asincrono",
+      "titulo": "El banco emite el documento más tarde (Imagin, N26)",
+      "cliente": "Su banco le hará llegar el certificado más tarde. Cuando lo reciba, envíenoslo por el mismo canal y completamos el registro.",
+      "interno": "Consulta a SAC cómo queda la solicitud mientras tanto y quién la retoma.",
+      "estado": "propuesta incompleta"
+    }
+  ],
+  "faq_comunes": [
+    {
+      "id": "donde-envio",
+      "p": "«¿Dónde os lo mando?»",
+      "r": "Puede enviarlo por correo a info@retabet.es o por este mismo chat. Antes de enviarlo, tape los 8 dígitos centrales del número de la tarjeta y el CVV si aparecen.",
+      "interno": "Canal propuesto, pendiente de confirmar con Compliance.",
+      "estado": "propuesta"
+    },
+    {
+      "p": "«¿Por qué necesitáis esto?»",
+      "r": "Para comprobar que la tarjeta está a su nombre antes de registrarla, como exige nuestro procedimiento de medios de pago.",
+      "interno": null,
+      "estado": "propuesta",
+      "id": "por-que"
+    },
+    {
+      "p": "«¿Os mando el número completo o el CVV para ir más rápido?»",
+      "r": "No. Nunca necesitamos el número completo, el CVV ni el PIN. Si aparecen, tápelos antes de enviar el justificante.",
+      "interno": null,
+      "estado": "derivado de la regla aprobada",
+      "id": "cvv-completo"
+    },
+    {
+      "p": "«¿Qué hacéis con la captura después?»",
+      "r": "Se guarda de forma segura solo el tiempo necesario para la comprobación y después se elimina, conforme a la normativa de protección de datos.",
+      "interno": "Plazo por confirmar con DPO; si preguntan por el plazo exacto, consulta a SAC.",
+      "estado": "propuesta",
+      "id": "que-haceis"
+    },
+    {
+      "p": "«¿Vale una foto de la tarjeta física?»",
+      "r": "De momento necesitamos el justificante de la app o la web de su banco. Si no le es posible, lo consultamos.",
+      "interno": "Las guías solo contemplan app/web del banco. Consulta a SAC si se acepta la tarjeta física con nombre y 4+4 dígitos.",
+      "estado": "consulta a SAC",
+      "id": "foto-tarjeta"
+    }
+  ],
+  "intenciones": [
+    {
+      "id": "cvv-completo",
+      "respuesta": "faq:cvv-completo",
+      "patrones": [
+        [
+          "cvv"
+        ],
+        [
+          "cvc"
+        ],
+        [
+          "pin"
+        ],
+        [
+          "codigo",
+          "seguridad"
+        ],
+        [
+          "numero",
+          "completo"
+        ],
+        [
+          "numero",
+          "entero"
+        ],
+        [
+          "tres",
+          "digitos"
+        ]
+      ]
+    },
+    {
+      "id": "por-que",
+      "respuesta": "faq:por-que",
+      "patrones": [
+        [
+          "por",
+          "que",
+          "necesit"
+        ],
+        [
+          "para",
+          "que",
+          "necesit"
+        ],
+        [
+          "para",
+          "que",
+          "quer"
+        ],
+        [
+          "por",
+          "que",
+          "ped"
+        ],
+        [
+          "para",
+          "que",
+          "sirve"
+        ]
+      ]
+    },
+    {
+      "id": "que-haceis",
+      "respuesta": "faq:que-haceis",
+      "patrones": [
+        [
+          "que",
+          "haceis"
+        ],
+        [
+          "guardais"
+        ],
+        [
+          "borrais"
+        ],
+        [
+          "mis",
+          "datos"
+        ],
+        [
+          "proteccion",
+          "datos"
+        ],
+        [
+          "seguro",
+          "enviar"
+        ]
+      ]
+    },
+    {
+      "id": "foto-tarjeta",
+      "respuesta": "faq:foto-tarjeta",
+      "patrones": [
+        [
+          "foto",
+          "tarjeta"
+        ],
+        [
+          "foto",
+          "fisica"
+        ],
+        [
+          "tarjeta",
+          "fisica"
+        ]
+      ]
+    },
+    {
+      "id": "donde-envio",
+      "respuesta": "faq:donde-envio",
+      "patrones": [
+        [
+          "donde",
+          "mando"
+        ],
+        [
+          "donde",
+          "envio"
+        ],
+        [
+          "donde",
+          "envi"
+        ],
+        [
+          "a",
+          "que",
+          "correo"
+        ],
+        [
+          "que",
+          "email"
+        ],
+        [
+          "que",
+          "direccion"
+        ]
+      ]
+    },
+    {
+      "id": "sin-app",
+      "respuesta": "sit:sin-app",
+      "patrones": [
+        [
+          "no",
+          "tengo",
+          "app"
+        ],
+        [
+          "no",
+          "tengo",
+          "aplicacion"
+        ],
+        [
+          "sin",
+          "app"
+        ],
+        [
+          "no",
+          "uso",
+          "app"
+        ],
+        [
+          "banca",
+          "online"
+        ],
+        [
+          "banca",
+          "electronica"
+        ],
+        [
+          "no",
+          "tengo",
+          "movil"
+        ]
+      ]
+    },
+    {
+      "id": "pantalla-distinta",
+      "respuesta": "sit:pantalla-distinta",
+      "patrones": [
+        [
+          "no",
+          "me",
+          "sale"
+        ],
+        [
+          "no",
+          "aparece"
+        ],
+        [
+          "no",
+          "encuentro"
+        ],
+        [
+          "no",
+          "lo",
+          "veo"
+        ],
+        [
+          "no",
+          "existe",
+          "opcion"
+        ]
+      ]
+    }
+  ]
+}
