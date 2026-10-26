@@ -48,7 +48,7 @@ y súbelo a GitHub.
 
 ## Controles incluidos
 - Clave de la API solo en Supabase, nunca en la web.
-- Enmascarado de tarjeta (4+4), CVV, PIN, DNI/NIE, IBAN, correo y teléfono en el navegador y otra vez en la función.
+- Enmascarado de tarjeta (6 primeros + 4 últimos), CVV, PIN, DNI/NIE, IBAN, correo y teléfono en el navegador y otra vez en la función.
 - La IA recibe solo el contenido aprobado; si responde «no cubierto», la web muestra el texto fijo de escalado y nunca texto inventado.
 - Salida validada: tipos conocidos, fichas existentes, longitudes máximas.
 - Límite de 20 consultas por minuto e IP (aproximado, por instancia) y tope de gasto en Anthropic.

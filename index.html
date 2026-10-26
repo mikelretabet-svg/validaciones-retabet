@@ -45,7 +45,10 @@ header.app h1{font-size:18px}
 header.app p{margin:0;color:var(--muted);font-size:13px}
 header.app .ver{margin-left:auto;font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
 header.app .tit p{white-space:nowrap}
-@media (max-width:820px){ header.app .ver{display:none} header.app .asisbtn{margin-left:auto} }
+header.app .ver{display:none}
+header.app .asisbtn{margin-left:auto}
+@media (max-width:420px){ header.app .tit{display:none} }
+@media (max-width:700px){ header.app .tit p{display:none} }
 
 /* Acceso */
 .gate{max-width:420px;margin:60px auto;display:grid;gap:14px}
@@ -297,13 +300,14 @@ function pintaSituaciones(b){
    3) Si no hay coincidencia, o el trabajador lo pide, se consulta a la IA
       a través de la función intermediaria. La IA solo usa el contenido aprobado. */
 
-// Tapa números de tarjeta (deja 4 primeros + 4 últimos), CVV, DNI/NIE, IBAN, correos y teléfonos.
+// Tapa números de tarjeta (deja 6 primeros + 4 últimos), CVV, DNI/NIE, IBAN, correos y teléfonos.
 function enmascara(t){
   let s = String(t);
   s = s.replace(/\b[A-Z]{2}\d{2}(?:[ -]?\d{4}){5}\b/gi, '[IBAN]');
   s = s.replace(/\b\d(?:[ -]?\d){11,18}\b/g, m => {
     const d = m.replace(/\D/g,'');
-    return d.slice(0,4) + ' •••• •••• ' + d.slice(-4);
+    const oculto = d.slice(0,6) + '•'.repeat(d.length - 10) + d.slice(-4);
+    return oculto.replace(/(.{4})(?=.)/g, '$1 ');
   });
   s = s.replace(/\b(cvv|cvc|cvv2|c[oó]digo de seguridad)\b\s*[:=]?\s*\d{3,4}\b/gi, '$1 [tapado]');
   s = s.replace(/\b[XYZ]\d{7}[A-Z]\b/gi, '[NIE]');
