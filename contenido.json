@@ -1,7 +1,7 @@
 {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.5",
+    "version_contenido": "1.6",
     "fecha": "2026-10-26",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
@@ -9,9 +9,9 @@
   "general": {
     "entrega": {
       "texto": "El cliente envía el justificante por correo electrónico o por el chat habitual. Indícale la dirección.",
-      "direccion": "info@retabet.es",
-      "nota_interna": "Propuesta: info@retabet.es es el buzón compartido de SAC al que ya llega documentación de clientes. Confirmar con Compliance que es el canal autorizado para este justificante y si en tienda se usa otro.",
-      "estado": "propuesta"
+      "direccion": "verificaciones@retabet.es",
+      "nota_interna": "Canal confirmado por Mikel (26/10/2026): verificaciones@retabet.es.",
+      "estado": "aprobado por Mikel (26/10/2026)"
     },
     "registro": {
       "texto": "Según el medio de pago (ver cada ficha).",
@@ -19,7 +19,7 @@
     },
     "archivo": {
       "texto": "El justificante se archiva según el procedimiento interno de protección de datos y se elimina cumplido el plazo de conservación. No lo guardes en el móvil ni en el equipo de la tienda.",
-      "nota_interna": "Propuesta de plazo: 2 meses, alineado con la retención en estudio para info@retabet.es. Confirmar con DPO.",
+      "nota_interna": "Propuesta de plazo: 2 meses, alineado con la retención en estudio para verificaciones@retabet.es. Confirmar con DPO.",
       "estado": "propuesta"
     },
     "escalado": {
@@ -97,9 +97,9 @@
     {
       "id": "donde-envio",
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a info@retabet.es o por este mismo chat. Antes de enviarlo, tape los dígitos del medio del número de la tarjeta y el CVV si aparecen.",
-      "interno": "Canal propuesto, pendiente de confirmar con Compliance.",
-      "estado": "propuesta",
+      "r": "Puede enviarlo por correo a verificaciones@retabet.es o por este mismo chat. Antes de enviarlo, tape los dígitos del medio del número de la tarjeta y el CVV si aparecen.",
+      "interno": null,
+      "estado": "aprobado por Mikel (26/10/2026)",
       "medios": [
         "tarjeta"
       ]
@@ -110,9 +110,9 @@
         "bizum"
       ],
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a info@retabet.es o por este mismo chat, tal y como lo genera su banco.",
-      "interno": "Canal propuesto, pendiente de confirmar con Compliance.",
-      "estado": "propuesta"
+      "r": "Puede enviarlo por correo a verificaciones@retabet.es o por este mismo chat, tal y como lo genera su banco.",
+      "interno": null,
+      "estado": "aprobado por Mikel (26/10/2026)"
     },
     {
       "p": "«¿Por qué necesitáis esto?»",
