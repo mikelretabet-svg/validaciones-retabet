@@ -72,9 +72,9 @@ window.CONTENIDO = {
       "medios": [
         "bizum"
       ],
-      "titulo": "El justificante de Bizum no muestra el nombre del titular",
-      "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre como titular. ¿Puede enviarlo?",
-      "interno": "Sin el nombre del titular no se cumple la regla. Si el banco no lo ofrece, consulta a SAC.",
+      "titulo": "El justificante de Bizum no muestra el nombre del titular ni el alias",
+      "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre o su alias de Bizum. ¿Puede enviarlo?",
+      "interno": "Sin nombre ni alias no se cumple la regla. Si el banco no lo ofrece, consulta a SAC.",
       "estado": "derivado de la regla aprobada"
     },
     {
@@ -1096,18 +1096,18 @@ window.CONTENIDO = {
       "titulo": "Titularidad de Bizum",
       "regla": {
         "titulo": "Regla del justificante de Bizum",
-        "texto": "Se acepta el justificante de Bizum tal y como lo genera el banco, sin tapar nada. Debe aparecer el nombre del titular.",
-        "estado": "aprobado por Mikel (26/10/2026)"
+        "texto": "Se acepta el justificante de Bizum tal y como lo genera el banco, sin tapar nada. Debe aparecer el nombre del titular o el alias de Bizum.",
+        "estado": "aprobado por Mikel (26/10/2026; alias aceptado como nombre)"
       },
       "frase_inicial": {
-        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre como titular. Le indico cómo obtenerlo.",
+        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. Le indico cómo obtenerlo.",
         "estado": "propuesta"
       },
       "verificacion": {
         "titulo": "Qué compruebas antes de dar por válido el justificante",
         "items": [
-          "Aparece el nombre del titular y coincide con el documento de identidad del cliente.",
-          "Si no aparece el nombre del titular, el justificante no cumple la regla: consulta a SAC.",
+          "Aparece el nombre del titular o el alias de Bizum, y corresponde al cliente.",
+          "Si no aparece ni el nombre del titular ni el alias, el justificante no cumple la regla: consulta a SAC.",
           "El justificante es el que genera la app o la web real del banco, sin recortes ni modificaciones."
         ],
         "estado": "items 1-2 derivados de la regla aprobada; item 3 propuesta"
@@ -1165,8 +1165,8 @@ window.CONTENIDO = {
           "estado": "provisional",
           "provisional": true,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final de la guía no muestra el nombre del titular, que es obligatorio. Pendiente de una pantalla que lo muestre.",
-          "aviso_especifico": "La pantalla «Configurar mi perfil» muestra el teléfono, la cuenta vinculada y el estado de Bizum, pero no el nombre del titular. Con solo esa pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_provisional": "Guía incompleta: la pantalla final no muestra ni el nombre del titular ni el alias de Bizum, y uno de los dos es obligatorio. Pendiente de una pantalla que lo muestre.",
+          "aviso_especifico": "La pantalla «Configurar mi perfil» muestra el teléfono, la cuenta vinculada y el estado de Bizum, pero ni el nombre del titular ni el alias. Con solo esa pantalla no se cumple la regla: consulta a SAC.",
           "pasos": [
             {
               "titulo": "Entra en «Mi Posición Global» y pulsa «Pagar»",
@@ -1191,11 +1191,11 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de «Configurar Bizum»",
-            "descripcion": "Teléfono (últimos dígitos), cuenta vinculada, estado, compra online y Bizum Pay. No aparece el nombre del titular.",
+            "descripcion": "Teléfono (últimos dígitos), cuenta vinculada, estado, compra online y Bizum Pay. No aparecen el nombre del titular ni el alias.",
             "captura": "bizum-bankinter/4.jpg"
           },
           "verificacion_extra": [
-            "Esta pantalla no muestra el nombre del titular: no cumple la regla por sí sola. Consulta a SAC."
+            "Esta pantalla no muestra ni el nombre del titular ni el alias: no cumple la regla por sí sola. Consulta a SAC."
           ],
           "faq": []
         },
@@ -1210,8 +1210,8 @@ window.CONTENIDO = {
           "estado": "provisional",
           "provisional": true,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final no muestra el nombre del titular, que es obligatorio. Pendiente de una pantalla que lo muestre.",
-          "aviso_especifico": "La pantalla de configuración de Bizum muestra el móvil asociado (solo los últimos dígitos) y la cuenta de abono, pero no el nombre del titular. Con solo esta pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_provisional": "Guía incompleta: la pantalla final no muestra ni el nombre del titular ni el alias de Bizum, y uno de los dos es obligatorio. Pendiente de una pantalla que lo muestre.",
+          "aviso_especifico": "La pantalla de configuración de Bizum muestra el móvil asociado (solo los últimos dígitos) y la cuenta de abono, pero ni el nombre del titular ni el alias. Con solo esta pantalla no se cumple la regla: consulta a SAC.",
           "pasos": [
             {
               "titulo": "Abre la app del Santander e inicia sesión",
@@ -1251,11 +1251,11 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de la configuración de Bizum",
-            "descripcion": "Móvil asociado al servicio (últimos dígitos) y cuenta de abono. No aparece el nombre del titular.",
+            "descripcion": "Móvil asociado al servicio (últimos dígitos) y cuenta de abono. No aparecen el nombre del titular ni el alias.",
             "captura": "bizum-santander/6.jpg"
           },
           "verificacion_extra": [
-            "Esta pantalla no muestra el nombre del titular: no cumple la regla por sí sola. Consulta a SAC."
+            "Esta pantalla no muestra ni el nombre del titular ni el alias: no cumple la regla por sí sola. Consulta a SAC."
           ],
           "faq": []
         },
@@ -1268,11 +1268,10 @@ window.CONTENIDO = {
             "sabadell"
           ],
           "familia": "captura",
-          "estado": "provisional",
-          "provisional": true,
+          "estado": "aprobado",
+          "provisional": false,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final muestra el alias de Bizum, no el nombre del titular. Pendiente de confirmar qué pantalla lo muestra.",
-          "aviso_especifico": "La pantalla «Configuración» muestra el alias («el nombre que se muestra cuando utilizas Bizum»), el teléfono vinculado y la cuenta. El alias lo elige el cliente y no acredita al titular. Con solo esta pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_especifico": "La pantalla «Configuración» muestra el alias de Bizum («el nombre que se muestra cuando utilizas Bizum»), el teléfono vinculado y la cuenta. El alias se acepta como nombre.",
           "pasos": [
             {
               "titulo": "Pulsa las tres líneas",
@@ -1297,61 +1296,56 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de «Configuración» de Bizum",
-            "descripcion": "Alias, número de teléfono vinculado y cuenta con la que opera. No aparece el nombre del titular (el alias no lo sustituye).",
+            "descripcion": "Alias, número de teléfono vinculado y cuenta con la que opera.",
             "captura": "bizum-sabadell/3.jpg"
           },
-          "verificacion_extra": [
-            "El alias no es el nombre del titular: esta pantalla no cumple la regla por sí sola. Consulta a SAC."
-          ],
+          "verificacion_extra": [],
           "faq": []
         },
         {
-          "id": "caja-navarra",
-          "nombre": "Caja Navarra",
+          "id": "caja-rural-navarra",
+          "nombre": "Caja Rural de Navarra",
           "alias": [
-            "caja navarra",
             "caja rural de navarra",
+            "caja navarra",
             "caja rural",
             "rural kutxa",
             "ruralvia",
             "rural"
           ],
           "familia": "captura",
-          "estado": "provisional",
-          "provisional": true,
+          "estado": "aprobado",
+          "provisional": false,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final muestra el alias de Bizum, no el nombre del titular. Pendiente de confirmar qué pantalla lo muestra.",
-          "aviso_especifico": "La pantalla «Perfil Bizum» muestra alias, número de móvil y cuenta asociada. La guía dice que aparece el nombre, pero el campo es «Alias», que lo elige el cliente y no acredita al titular. Con solo esta pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_especifico": "La pantalla «Perfil Bizum» muestra el alias, el número de móvil y la cuenta asociada. El alias se acepta como nombre.",
           "pasos": [
             {
               "titulo": "Abre la app y pulsa «Bizum»",
               "detalle": "En la barra inferior.",
-              "captura": "bizum-caja-navarra/1.jpg"
+              "captura": "bizum-caja-rural-navarra/1.jpg"
             },
             {
               "titulo": "Pulsa «Ver más opciones»",
               "detalle": null,
-              "captura": "bizum-caja-navarra/2.jpg"
+              "captura": "bizum-caja-rural-navarra/2.jpg"
             },
             {
               "titulo": "Pulsa «Mi perfil»",
               "detalle": "La primera opción.",
-              "captura": "bizum-caja-navarra/3.jpg"
+              "captura": "bizum-caja-rural-navarra/3.jpg"
             },
             {
               "titulo": "Haz una captura de «Perfil Bizum»",
               "detalle": "Aparecen alias, número de móvil y cuenta corriente asociada.",
-              "captura": "bizum-caja-navarra/4.jpg"
+              "captura": "bizum-caja-rural-navarra/4.jpg"
             }
           ],
           "resultado": {
             "titulo": "Captura de «Perfil Bizum»",
-            "descripcion": "Alias, número de móvil y cuenta asociada. El alias no es el nombre del titular.",
-            "captura": "bizum-caja-navarra/4.jpg"
+            "descripcion": "Alias, número de móvil y cuenta asociada.",
+            "captura": "bizum-caja-rural-navarra/4.jpg"
           },
-          "verificacion_extra": [
-            "El alias no es el nombre del titular: esta pantalla no cumple la regla por sí sola. Consulta a SAC."
-          ],
+          "verificacion_extra": [],
           "faq": []
         }
       ]
