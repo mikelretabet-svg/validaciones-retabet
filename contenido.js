@@ -3,8 +3,8 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.1",
-    "fecha": "2026-10-24",
+    "version_contenido": "1.2",
+    "fecha": "2026-10-26",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
   },
@@ -16,7 +16,7 @@ window.CONTENIDO = {
       "estado": "aprobado por Mikel (23/10/2026)"
     },
     "frase_inicial": {
-      "texto": "Para completar el registro de su tarjeta necesito un justificante de su banco en el que aparezca su nombre como titular y el número de la tarjeta. No necesito el número completo: con los 4 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. Le indico cómo obtenerlo en su app.",
+      "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito un justificante de su banco en el que aparezca su nombre y el número de la tarjeta. No necesito el número completo: con los 4 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. Le indico cómo obtenerlo en su app.",
       "estado": "propuesta"
     },
     "entrega": {
@@ -716,10 +716,17 @@ window.CONTENIDO = {
     },
     {
       "p": "«¿Por qué necesitáis esto?»",
-      "r": "Para comprobar que la tarjeta está a su nombre antes de registrarla, como exige nuestro procedimiento de medios de pago.",
+      "r": "Es una obligación legal, no una decisión de RETABET. Un real decreto nos obliga, a partir del 28 de octubre de 2026, a comprobar que el titular del medio de pago coincide con el titular de la cuenta en RETABET.",
       "interno": null,
-      "estado": "propuesta",
+      "estado": "aprobado por Mikel (26/10/2026)",
       "id": "por-que"
+    },
+    {
+      "id": "otra-casa",
+      "p": "«En otras casas de apuestas no me lo piden»",
+      "r": "No es una decisión de RETABET: es un requisito legal que estamos obligados a aplicar a partir del 28 de octubre de 2026.",
+      "interno": "No compares con otros operadores ni afirmes lo que hacen ellos. Si el cliente insiste, consulta a SAC.",
+      "estado": "propuesta"
     },
     {
       "p": "«¿Os mando el número completo o el CVV para ir más rápido?»",
@@ -803,6 +810,56 @@ window.CONTENIDO = {
           "para",
           "que",
           "sirve"
+        ],
+        [
+          "obligatorio"
+        ],
+        [
+          "es",
+          "obligatorio"
+        ],
+        [
+          "quien",
+          "obliga"
+        ],
+        [
+          "ley"
+        ]
+      ]
+    },
+    {
+      "id": "otra-casa",
+      "respuesta": "faq:otra-casa",
+      "patrones": [
+        [
+          "otra",
+          "casa"
+        ],
+        [
+          "otras",
+          "casas"
+        ],
+        [
+          "kirol"
+        ],
+        [
+          "otro",
+          "sitio"
+        ],
+        [
+          "no",
+          "me",
+          "lo",
+          "piden"
+        ],
+        [
+          "en",
+          "otros"
+        ],
+        [
+          "por",
+          "que",
+          "vosotros"
         ]
       ]
     },
