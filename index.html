@@ -67,6 +67,11 @@ header.app .asisbtn{margin-left:auto}
 .bank .tag{margin-top:2px}
 .fam{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--lime-soft);color:var(--lime-ink);font-weight:bold}
 .hint{color:var(--muted);font-size:14px;margin:10px 0 0}
+/* Pestañas de medio de pago */
+.tabs{display:flex;gap:6px;margin:18px 0 0;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;width:max-content;max-width:100%}
+.tabs button{border:0;background:none;color:var(--fg);padding:10px 22px;border-radius:9px;font-size:16px;font-weight:bold}
+.tabs button[aria-selected="true"]{background:var(--lime);color:var(--on-lime)}
+.medio{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--lime);color:var(--lime-ink);font-weight:bold}
 .empty{padding:20px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center}
 
 /* Ficha */
@@ -155,7 +160,7 @@ header.app .temabtn{padding:8px 12px;font-size:14px;margin-left:8px;flex:none}
   <header class="app">
     <button class="home" id="btnHome" aria-label="Inicio">
       <img class="logo" src="img/logo-retabet.jpg" alt="RETABET Sports &amp; Casino" width="130" height="52">
-      <div class="tit"><h1>Validaciones</h1><p>Solicitud de datos de tarjeta · Uso interno</p></div>
+      <div class="tit"><h1>Validaciones</h1><p>Titularidad de tarjeta y Bizum · Uso interno</p></div>
     </button>
     <div class="ver" id="ver"></div>
     <button class="btn asisbtn" id="btnAsis" hidden>Asistente</button>
@@ -188,7 +193,15 @@ if (!C) {
 }
 const FAM = {captura:'Captura de pantalla', documento:'Documento del banco', asincrono:'Certificado · tras llamada'};
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
-let bancos = C.bancos.filter(b => b.publicado !== false);
+// Medios de pago (tarjeta, Bizum…). Cada uno tiene su regla, frase, comprobaciones y bancos.
+const MEDIOS = C.medios;
+const medioDe = id => MEDIOS.find(m => m.id === id) || MEDIOS[0];
+const bancosDe = id => medioDe(id).bancos.filter(b => b.publicado !== false);
+let medioActual = MEDIOS[0].id;
+// Un texto (respuesta o situación) aplica a un medio si no indica medios o lo incluye.
+const aplica = (x, medio) => !x.medios || x.medios.includes(medio);
+// Hash de cada ficha: tarjeta mantiene el formato antiguo (#banco=ing); el resto, #<medio>=<id>.
+const hashFicha = (medio, id) => (medio === 'tarjeta' ? 'banco' : medio) + '=' + id;
 let hashActual = null; // evita re-pintar cuando el hash lo cambia la propia app
 function setHash(h){ hashActual = h; if (location.hash.replace('#','') !== h) location.hash = h; }
 
@@ -196,7 +209,12 @@ function setHash(h){ hashActual = h; if (location.hash.replace('#','') !== h) lo
 function ruta(){
   $('#btnAsis').hidden = false;
   const h = location.hash.replace('#','');
-  if (h.startsWith('banco=')) { const b = bancos.find(x => x.id === h.slice(6)); if (b) return pintaFicha(b); }
+  const m = h.match(/^([a-z]+)=([a-z0-9-]+)$/);
+  if (m) {
+    const medio = m[1] === 'banco' ? 'tarjeta' : m[1];
+    const b = MEDIOS.some(x => x.id === medio) && bancosDe(medio).find(x => x.id === m[2]);
+    if (b) return pintaFicha(b, medio);
+  }
   if (h === 'situaciones') return pintaSituaciones(null);
   if (h === 'asistente') return pintaAsistente();
   pintaBancos();
@@ -220,12 +238,15 @@ function pintaAcceso(){
 /* ---------- Pantalla 1: bancos ---------- */
 function pintaBancos(){
   setHash('');
+  const M = medioDe(medioActual);
+  const bancos = bancosDe(medioActual);
   $('#app').innerHTML = `
-    <div class="search"><input id="q" type="search" placeholder="Escribe el banco del cliente (ej. Kutxa, ING, Caixa…)" aria-label="Buscar banco"></div>
+    <div class="tabs" role="tablist" aria-label="Medio de pago">${MEDIOS.map(x => `<button role="tab" data-medio="${x.id}" aria-selected="${x.id === medioActual}">${esc(x.nombre)}</button>`).join('')}</div>
+    <div class="search"><input id="q" type="search" placeholder="Escribe el banco del cliente (${esc(M.nombre)})" aria-label="Buscar banco"></div>
     <div class="grid" id="grid"></div>
-    <p class="hint">Un toque abre la ficha. El buscador acepta nombres parciales y alias («La Caixa», «Rural Kutxa», «Imaginbank»).</p>
+    <p class="hint">Un toque abre la ficha. El buscador acepta nombres parciales y alias (por ejemplo «La Caixa» o «Rural Kutxa»).</p>
     <div class="actions"><button class="btn prim" id="btnAsis2">Asistente de respuestas</button><button class="btn warnb" id="btnSit">No se puede completar</button></div>
-    <footer class="band">Si el banco del cliente no está en la lista, no existe procedimiento validado: consulta a SAC. Nunca pidas el número completo, el CVV ni el PIN.</footer>`;
+    <footer class="band">${esc(M.aviso_lista)}</footer>`;
   const grid = $('#grid');
   const pinta = q => {
     q = norm(q.trim());
@@ -235,7 +256,8 @@ function pintaBancos(){
   };
   pinta('');
   $('#q').addEventListener('input', e => pinta(e.target.value));
-  grid.addEventListener('click', e => { const b = e.target.closest('.bank'); if (b) pintaFicha(bancos.find(x => x.id === b.dataset.id)); });
+  grid.addEventListener('click', e => { const b = e.target.closest('.bank'); if (b) pintaFicha(bancos.find(x => x.id === b.dataset.id), medioActual); });
+  document.querySelectorAll('.tabs [data-medio]').forEach(t => t.addEventListener('click', () => { medioActual = t.dataset.medio; pintaBancos(); }));
   $('#btnSit').addEventListener('click', () => pintaSituaciones(null));
   $('#btnAsis2').addEventListener('click', pintaAsistente);
   $('#q').focus();
@@ -247,20 +269,22 @@ function faqHTML(lista){
   if (!lista.length) return '';
   return lista.map(f => `<details><summary>${esc(f.p)}</summary><div class="body"><div class="say">${esc(f.r)}</div>${f.interno?`<p class="hint">Interno: ${esc(f.interno)}</p>`:''}</div></details>`).join('');
 }
-function pintaFicha(b){
-  setHash('banco=' + b.id);
+function pintaFicha(b, medio){
+  medioActual = medio || medioActual;
+  const M = medioDe(medioActual);
+  setHash(hashFicha(M.id, b.id));
   const g = C.general;
-  const checks = g.verificacion.items.concat(b.verificacion_extra || []);
+  const checks = M.verificacion.items.concat(b.verificacion_extra || []);
   $('#app').innerHTML = `
-    <div class="crumbs"><button id="back">← Bancos</button><span>/</span><span>${esc(b.nombre)}</span></div>
-    <div class="fichahead"><h2>${esc(b.nombre)}</h2><span class="fam">${esc(FAM[b.familia]||b.familia)}</span>${b.provisional?'<span class="tag">PROVISIONAL</span>':''}<span class="meta">Contenido v${esc(C.meta.version_contenido)} · ${esc(C.meta.fecha)}</span></div>
+    <div class="crumbs"><button id="back">← Bancos</button><span>/</span><span>${esc(M.nombre)} · ${esc(b.nombre)}</span></div>
+    <div class="fichahead"><h2>${esc(b.nombre)}</h2><span class="medio">${esc(M.nombre)}</span><span class="fam">${esc(FAM[b.familia]||b.familia)}</span>${b.provisional?'<span class="tag">PROVISIONAL</span>':''}<span class="meta">Contenido v${esc(C.meta.version_contenido)} · ${esc(C.meta.fecha)}</span></div>
     ${b.aviso_provisional?`<div class="notice"><b>Aviso</b><span>${esc(b.aviso_provisional)}</span></div>`:''}
-    <div class="notice"><b>Regla</b><span>${esc(g.regla.texto)} Ejemplo: <b>${esc(g.regla.ejemplo_numero)}</b></span></div>
+    <div class="notice"><b>Regla</b><span>${esc(M.regla.texto)}${M.regla.ejemplo_numero ? ` Ejemplo: <b>${esc(M.regla.ejemplo_numero)}</b>` : ''}</span></div>
     ${b.aviso_especifico?`<div class="notice"><b>${esc(b.nombre)}</b><span>${esc(b.aviso_especifico)}</span></div>`:''}
     <div class="blocks">
       <section class="blk"><h3><span class="n">1</span>Qué le pides al cliente<span class="who">Trabajador</span></h3>
-        <div class="body"><div class="say" id="frase">${esc(g.frase_inicial.texto)}</div><button class="copy" data-copy="frase">⧉ Copiar frase</button></div></section>
-      <section class="blk"><h3><span class="n">2</span>Pasos que hace el cliente en su app<span class="who">Cliente</span></h3>
+        <div class="body"><div class="say" id="frase">${esc(M.frase_inicial.texto)}</div><button class="copy" data-copy="frase">⧉ Copiar frase</button></div></section>
+      <section class="blk"><h3><span class="n">2</span>Pasos que hace el cliente en su banco<span class="who">Cliente</span></h3>
         <div class="body"><ol class="steps">${b.pasos.map(p => `<li><div class="t"><b>${esc(p.titulo)}</b>${p.detalle?`<span>${esc(p.detalle)}</span>`:''}</div>${thumb(p.captura, p.titulo)}</li>`).join('')}</ol>
         ${b.pasos.some(p=>p.captura)?'<p class="hint">Capturas de la guía original (cuentas de prueba). Un toque las amplía.</p>':'<p class="hint">Esta guía no tiene capturas.</p>'}</div></section>
       <section class="blk"><h3><span class="n">3</span>Qué recibes y qué compruebas<span class="who">Trabajador</span></h3>
@@ -268,13 +292,13 @@ function pintaFicha(b){
         <ul class="check">${checks.map(c => `<li><span class="box"></span><span>${esc(c)}</span></li>`).join('')}</ul></div></section>
       <section class="blk"><h3><span class="n">4</span>Después<span class="who">Trabajador</span></h3>
         <div class="body"><dl class="kv">
-          <dt>Cómo lo envía</dt><dd>${esc(g.entrega.texto)} Dirección: <b id="dir">${esc(g.entrega.direccion)}</b> <button class="copy" data-copy="dir" style="margin:0 0 0 6px;padding:4px 8px">⧉</button></dd>
-          <dt>Qué registras</dt><dd>${esc(g.registro.texto)}</dd>
+          <dt>Cómo lo envía</dt><dd>${esc(g.entrega.texto)} ${esc(M.entrega_extra || '')} Dirección: <b id="dir">${esc(g.entrega.direccion)}</b> <button class="copy" data-copy="dir" style="margin:0 0 0 6px;padding:4px 8px">⧉</button></dd>
+          <dt>Qué registras</dt><dd>${esc(M.registro)}</dd>
           <dt>Archivo</dt><dd>${esc(g.archivo.texto)}</dd>
           <dt>Si no se puede</dt><dd>${esc(g.escalado.texto)}</dd></dl>
         <div class="actions"><button class="btn prim" id="done">Hecho · volver a bancos</button><button class="btn warnb" id="sit">No se puede completar</button></div></div></section>
     </div>
-    <div class="faq"><h3>Respuestas al cliente</h3>${faqHTML((b.faq||[]).concat(C.faq_comunes))}</div>`;
+    <div class="faq"><h3>Respuestas al cliente</h3>${faqHTML((b.faq||[]).concat(C.faq_comunes.filter(f => aplica(f, M.id))))}</div>`;
   $('#back').addEventListener('click', pintaBancos);
   $('#done').addEventListener('click', pintaBancos);
   $('#sit').addEventListener('click', () => pintaSituaciones(b));
@@ -288,9 +312,10 @@ function pintaSituaciones(b){
     <div class="crumbs"><button id="back">← ${b?esc(b.nombre):'Bancos'}</button><span>/</span><span>No se puede completar</span></div>
     <h2 style="font-size:26px">No se puede completar</h2>
     <p class="hint">Elige la situación. Cada una tiene una frase para el cliente y un paso interno.</p>
-    <div class="cases">${C.situaciones.map(s => `<div class="case"><b>${esc(s.titulo)}</b><div class="say">${esc(s.cliente)}</div><p class="hint">Interno: ${esc(s.interno)}</p></div>`).join('')}</div>
+    <p class="hint">Medio de pago: <b>${esc(medioDe(medioActual).nombre)}</b></p>
+    <div class="cases">${C.situaciones.filter(s => aplica(s, medioActual)).map(s => `<div class="case"><b>${esc(s.titulo)}</b><div class="say">${esc(s.cliente)}</div><p class="hint">Interno: ${esc(s.interno)}</p></div>`).join('')}</div>
     <footer class="band">${esc(C.general.escalado.texto)}</footer>`;
-  $('#back').addEventListener('click', () => b ? pintaFicha(b) : pintaBancos());
+  $('#back').addEventListener('click', () => b ? pintaFicha(b, medioActual) : pintaBancos());
   window.scrollTo(0,0);
 }
 
@@ -335,9 +360,11 @@ function buscaIntencion(t){
   return mejor ? mejor.it : null;
 }
 
-// Resuelve "faq:id" o "sit:id" a {cliente, interno}.
-function resuelve(ref){
-  const [tipo, id] = ref.split(':');
+// Resuelve "faq:id" o "sit:id" a {cliente, interno}. Si existe una variante del medio (id-bizum), se usa esa.
+function resuelve(ref, medio){
+  const [tipo, base] = ref.split(':');
+  const lista = tipo === 'faq' ? C.faq_comunes : C.situaciones;
+  const id = lista.some(x => x.id === base + '-' + medio) ? base + '-' + medio : base;
   if (tipo === 'faq') {
     const f = C.faq_comunes.find(x => x.id === id);
     return f && {titulo: f.p, cliente: f.r, interno: f.interno, estado: f.estado};
@@ -346,16 +373,16 @@ function resuelve(ref){
   return s && {titulo: s.titulo, cliente: s.cliente, interno: s.interno, estado: s.estado};
 }
 
-// Bancos mencionados en el mensaje (por nombre o alias).
-function bancosEn(t){
+// Bancos del medio indicado mencionados en el mensaje (por nombre o alias).
+function bancosEn(t, medio){
   const n = ' ' + palabras(t).join(' ') + ' ';
-  return bancos.filter(b => [b.nombre].concat(b.alias).some(a => n.includes(' ' + palabras(a).join(' ') + ' ')));
+  return bancosDe(medio).filter(b => [b.nombre].concat(b.alias).some(a => n.includes(' ' + palabras(a).join(' ') + ' ')));
 }
 
 let nResp = 0;
 function bloqueRespuesta(clase, etiqueta, cliente, interno, fichas, extra, claseSay){
   const id = 'r' + (++nResp);
-  const links = (fichas || []).map(b => `<button data-ficha="${esc(b.id)}">Ver ficha ${esc(b.nombre)}</button>`).join('');
+  const links = (fichas || []).map(b => `<button data-ficha="${esc(b._medio)}:${esc(b.id)}">Ver ficha ${esc(b.nombre)}${b._medio !== 'tarjeta' ? ' (' + esc(medioDe(b._medio).nombre) + ')' : ''}</button>`).join('');
   return `<div class="resp ${clase}"><span class="lbl">${etiqueta}</span>
     <div class="say ${claseSay||''}" id="${id}">${esc(cliente)}</div>
     <div><button class="copy" data-copy="${id}" style="margin:0">⧉ Copiar texto</button></div>
@@ -372,11 +399,16 @@ function pintaAsistente(){
     <form class="asis" id="fAsis">
       <label for="consulta">Mensaje del cliente</label>
       <textarea id="consulta" maxlength="1000" placeholder="Ej.: no me sale la opción de ver detalle en la app del Santander"></textarea>
+      <label for="medioSel">Medio de pago</label>
+      <select id="medioSel">${MEDIOS.map(x => `<option value="${x.id}"${x.id === medioActual ? ' selected' : ''}>${esc(x.nombre)}</option>`).join('')}</select>
       <label for="bancoSel">Banco del cliente (opcional)</label>
-      <select id="bancoSel"><option value="">No lo sé / no aplica</option>${bancos.map(b => `<option value="${b.id}">${esc(b.nombre)}</option>`).join('')}</select>
+      <select id="bancoSel"></select>
       <div class="actions"><button class="btn prim" type="submit">Buscar respuesta</button></div>
     </form>
     <div id="salida"></div>`;
+  const opcionesBanco = () => { $('#bancoSel').innerHTML = '<option value="">No lo sé / no aplica</option>' + bancosDe($('#medioSel').value).map(b => `<option value="${b.id}">${esc(b.nombre)}</option>`).join(''); };
+  opcionesBanco();
+  $('#medioSel').addEventListener('change', opcionesBanco);
   $('#back').addEventListener('click', pintaBancos);
   $('#fAsis').addEventListener('submit', e => { e.preventDefault(); responde(false); });
   $('#consulta').focus();
@@ -388,14 +420,18 @@ async function responde(forzarIA){
   const out = $('#salida');
   if (!bruto) { out.innerHTML = '<p class="wait">Escribe o pega el mensaje del cliente.</p>'; return; }
   const texto = enmascara(bruto);
-  const selId = $('#bancoSel').value;
-  const fichas = bancosEn(texto);
-  if (selId && !fichas.some(b => b.id === selId)) fichas.unshift(bancos.find(b => b.id === selId));
+  // Medio: el seleccionado; si el mensaje habla de Bizum, Bizum.
+  let medio = $('#medioSel').value;
+  if (palabras(texto).includes('bizum') && MEDIOS.some(x => x.id === 'bizum')) medio = 'bizum';
+  const selId = medio === $('#medioSel').value ? $('#bancoSel').value : '';
+  const conMedio = b => Object.assign({}, b, {_medio: medio});
+  const fichas = bancosEn(texto, medio).map(conMedio);
+  if (selId && !fichas.some(b => b.id === selId)) fichas.unshift(conMedio(bancosDe(medio).find(b => b.id === selId)));
   let html = texto !== bruto ? `<div class="masked">Datos tapados antes de analizar: <b>${esc(texto)}</b></div>` : '';
 
   const it = forzarIA ? null : buscaIntencion(texto);
   if (it) {
-    const r = resuelve(it.respuesta);
+    const r = resuelve(it.respuesta, medio);
     if (r) {
       out.innerHTML = html + bloqueRespuesta('ok', 'Respuesta aprobada · ' + esc(r.titulo), r.cliente, r.interno, fichas,
         `<div><button class="btn" id="noEs" style="padding:8px 12px;font-size:14px">No es esto: preguntar a la IA</button></div>`);
@@ -415,12 +451,13 @@ async function responde(forzarIA){
     const ctl = new AbortController(); const tm = setTimeout(() => ctl.abort(), ASISTENTE_TIMEOUT_MS);
     const res = await fetch(ASISTENTE_URL, {method:'POST', signal: ctl.signal,
       headers:{'Content-Type':'application/json','x-codigo':CODIGO_ACCESO},
-      body: JSON.stringify({consulta: texto, banco: selId || null})});
+      body: JSON.stringify({consulta: texto, medio, banco: selId ? medio + ':' + selId : null})});
     clearTimeout(tm);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const r = await res.json();
-    const fIA = (r.fichas || []).map(id => bancos.find(b => b.id === id)).filter(Boolean);
-    const todas = fichas.concat(fIA.filter(b => !fichas.includes(b)));
+    // La IA devuelve fichas como "medio:id"
+    const fIA = (r.fichas || []).map(ref => { const [md, id] = String(ref).split(':'); const b = MEDIOS.some(x => x.id === md) && bancosDe(md).find(x => x.id === id); return b ? Object.assign({}, b, {_medio: md}) : null; }).filter(Boolean);
+    const todas = fichas.concat(fIA.filter(b => !fichas.some(f => f.id === b.id && f._medio === b._medio)));
     if (r.tipo === 'respuesta') {
       out.innerHTML = html + bloqueRespuesta('ia', 'Borrador IA · revisa antes de enviar', r.texto_cliente, r.nota_interna, todas);
     } else if (r.tipo === 'aclaracion') {
@@ -447,7 +484,7 @@ document.addEventListener('click', e => {
     return;
   }
   const fb = e.target.closest('[data-ficha]');
-  if (fb) { pintaFicha(bancos.find(b => b.id === fb.dataset.ficha)); return; }
+  if (fb) { const [md, id] = fb.dataset.ficha.split(':'); pintaFicha(bancosDe(md).find(b => b.id === id), md); return; }
   const th = e.target.closest('.thumb');
   if (th) { $('#lbImg').src = th.dataset.src; $('#lb').hidden = false; }
 });
