@@ -15,8 +15,19 @@
   --bg:#ffffff; --fg:#1f2a1a; --muted:#5f6b58; --line:#dfe6d6; --panel:#f6f9f0;
   --lime:#A6CE39; --lime-soft:#E8F5C5; --lime-ink:#4d6a10;
   --warn:#b96e00; --warn-soft:#fff2db; --ok:#2f7d32;
+  --on-lime:#1f2a1a; --thumb-bg:#ffffff;
+  color-scheme:light;
   --font:Arial, Helvetica, sans-serif;
 }
+/* Modo oscuro: sigue al sistema salvo que el usuario elija claro/oscuro (data-tema) */
+@media (prefers-color-scheme: dark){ :root:not([data-tema="claro"]){
+  --bg:#11160d; --fg:#e9f0df; --muted:#a7b39a; --line:#2c3524; --panel:#1a2114;
+  --lime-soft:#26340f; --lime-ink:#c8e57a; --warn:#f0b24a; --warn-soft:#3a2a10; --ok:#8fd092;
+  --thumb-bg:#e9f0df; color-scheme:dark } }
+:root[data-tema="oscuro"]{
+  --bg:#11160d; --fg:#e9f0df; --muted:#a7b39a; --line:#2c3524; --panel:#1a2114;
+  --lime-soft:#26340f; --lime-ink:#c8e57a; --warn:#f0b24a; --warn-soft:#3a2a10; --ok:#8fd092;
+  --thumb-bg:#e9f0df; color-scheme:dark }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.45}
 .wrap{max-width:760px;margin:0 auto;padding:0 16px 48px}
@@ -28,10 +39,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 /* Cabecera */
 header.app{display:flex;align-items:center;gap:14px;padding:14px 0 10px;border-bottom:4px solid var(--lime)}
 header.app button.home{all:unset;display:flex;align-items:center;gap:14px;cursor:pointer}
-.logo{width:40px;height:40px;border-radius:8px;background:var(--lime);display:grid;place-items:center;color:#1f2a1a;font-weight:bold;font-size:18px}
+.logo{height:52px;width:auto;border-radius:8px;display:block;background:#001506}
+header.app .tit{border-left:2px solid var(--line);padding-left:14px}
 header.app h1{font-size:18px}
 header.app p{margin:0;color:var(--muted);font-size:13px}
-header.app .ver{margin-left:auto;font-size:12px;color:var(--muted);text-align:right}
+header.app .ver{margin-left:auto;font-size:12px;color:var(--muted);text-align:right;white-space:nowrap}
+header.app .tit p{white-space:nowrap}
+@media (max-width:820px){ header.app .ver{display:none} header.app .asisbtn{margin-left:auto} }
 
 /* Acceso */
 .gate{max-width:420px;margin:60px auto;display:grid;gap:14px}
@@ -63,7 +77,7 @@ header.app .ver{margin-left:auto;font-size:12px;color:var(--muted);text-align:ri
 .blocks{display:grid;gap:14px;margin-top:14px}
 section.blk{border:1px solid var(--line);border-radius:10px;overflow:hidden}
 section.blk>h3{display:flex;align-items:center;gap:10px;font-size:16px;padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
-section.blk>h3 .n{width:26px;height:26px;border-radius:50%;background:var(--lime);color:#1f2a1a;display:grid;place-items:center;font-size:14px;flex:none}
+section.blk>h3 .n{width:26px;height:26px;border-radius:50%;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-size:14px;flex:none}
 section.blk>h3 .who{margin-left:auto;font-size:12px;font-weight:normal;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .body{padding:14px}
 .say{background:var(--lime-soft);border-radius:8px;padding:12px 14px;font-size:17px}
@@ -87,7 +101,7 @@ ul.check li .box{width:20px;height:20px;border:2px solid var(--ok);border-radius
 .kv dd{margin:0}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
 .btn{border:2px solid var(--line);background:var(--bg);color:var(--fg);border-radius:10px;padding:12px 16px;font-size:16px;font-weight:bold}
-.btn.prim{background:var(--lime);border-color:var(--lime);color:#1f2a1a}
+.btn.prim{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
 .btn.warnb{border-color:var(--warn);color:var(--warn)}
 
 /* Situaciones */
@@ -106,12 +120,13 @@ footer.band{margin-top:28px;background:var(--lime-soft);border-top:3px solid var
 
 /* Visor de capturas */
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:grid;place-items:center;padding:16px;z-index:50}
-.lb img{max-width:100%;max-height:92vh;border-radius:8px;background:#fff}
-.lb button{position:absolute;top:12px;right:12px;background:#fff;border:0;border-radius:8px;padding:8px 12px;font-weight:bold}
+.lb img{max-width:100%;max-height:92vh;border-radius:8px;background:var(--thumb-bg)}
+.lb button{position:absolute;top:12px;right:12px;background:var(--bg);color:var(--fg);border:0;border-radius:8px;padding:8px 12px;font-weight:bold}
 
 /* Asistente */
 header.app .asisbtn{padding:8px 12px;font-size:14px;border-color:var(--lime);margin-left:12px;flex:none}
 header.app .ver + .asisbtn{margin-left:12px}
+header.app .temabtn{padding:8px 12px;font-size:14px;margin-left:8px;flex:none}
 .asis textarea{width:100%;min-height:110px;padding:12px 14px;font:inherit;font-size:17px;border:2px solid var(--line);border-radius:10px;resize:vertical;background:var(--bg);color:var(--fg)}
 .asis select{width:100%;padding:10px 12px;font:inherit;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
 .asis label{display:block;font-size:13px;color:var(--muted);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.05em}
@@ -128,7 +143,7 @@ header.app .ver + .asisbtn{margin-left:12px}
 .wait{color:var(--muted);font-size:15px;margin-top:14px}
 .say.ask::before{content:"Pregunta para aclarar con el cliente"}
 
-@media (max-width:480px){ .kv{grid-template-columns:1fr} .fichahead h2{font-size:24px} header.app .ver{display:none} }
+@media (max-width:480px){ .kv{grid-template-columns:1fr} .fichahead h2{font-size:24px} header.app .ver{display:none} .logo{height:30px} header.app .tit{padding-left:8px;min-width:0} header.app .tit p{display:none} header.app h1{font-size:14px} header.app{gap:6px;flex-wrap:wrap} header.app .asisbtn{margin-left:auto;padding:7px 9px;font-size:13px} header.app .temabtn{margin-left:0;padding:7px 9px;font-size:13px} header.app .temabtn .m{display:none} header.app .temabtn .w{display:inline-block} header.app .temabtn .w::first-letter{text-transform:uppercase} header.app{flex-wrap:nowrap} }
 @media print{ .copy,.actions,.btn{display:none} }
 </style>
 </head>
@@ -136,11 +151,12 @@ header.app .ver + .asisbtn{margin-left:12px}
 <div class="wrap">
   <header class="app">
     <button class="home" id="btnHome" aria-label="Inicio">
-      <div class="logo">R</div>
-      <div><h1>Validaciones RETABET</h1><p>Solicitud de datos de tarjeta · Uso interno</p></div>
+      <img class="logo" src="img/logo-retabet.jpg" alt="RETABET Sports &amp; Casino" width="130" height="52">
+      <div class="tit"><h1>Validaciones</h1><p>Solicitud de datos de tarjeta · Uso interno</p></div>
     </button>
     <div class="ver" id="ver"></div>
     <button class="btn asisbtn" id="btnAsis" hidden>Asistente</button>
+    <button class="btn temabtn" id="btnTema" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar entre modo claro y oscuro">Modo oscuro</button>
   </header>
   <main id="app" aria-live="polite"></main>
 </div>
@@ -436,6 +452,28 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') $('#lb').hid
 $('#btnAsis').addEventListener('click', () => { if (tieneAcceso()) pintaAsistente(); });
 $('#btnHome').addEventListener('click', () => { if (tieneAcceso()) pintaBancos(); });
 window.addEventListener('hashchange', () => { if (location.hash.replace('#','') === hashActual) return; if (tieneAcceso()) ruta(); });
+
+/* ---------- Tema claro / oscuro ----------
+   Por defecto sigue al sistema. La elección del usuario se guarda solo en este navegador. */
+const CLAVE_TEMA = 'vr_tema';
+function temaActual(){
+  const t = document.documentElement.dataset.tema;
+  if (t) return t;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'oscuro' : 'claro';
+}
+function aplicaTema(t){
+  if (t) document.documentElement.dataset.tema = t; else delete document.documentElement.dataset.tema;
+  // El botón indica el modo al que se cambia al pulsarlo
+  $('#btnTema').innerHTML = '<span class="m">Modo </span><span class="w">' + (temaActual() === 'oscuro' ? 'claro' : 'oscuro') + '</span>';
+}
+let temaGuardado = null;
+try { temaGuardado = localStorage.getItem(CLAVE_TEMA); } catch(e){}
+aplicaTema(temaGuardado);
+$('#btnTema').addEventListener('click', () => {
+  const nuevo = temaActual() === 'oscuro' ? 'claro' : 'oscuro';
+  aplicaTema(nuevo);
+  try { localStorage.setItem(CLAVE_TEMA, nuevo); } catch(e){}
+});
 
 /* ---------- Arranque ---------- */
 $('#ver').textContent = `Contenido v${C.meta.version_contenido} · ${C.meta.fecha}`;
