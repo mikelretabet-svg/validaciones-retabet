@@ -3,7 +3,7 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.8",
+    "version_contenido": "1.9",
     "fecha": "2026-10-27",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
@@ -74,7 +74,7 @@ window.CONTENIDO = {
       ],
       "titulo": "El justificante de Bizum no muestra el nombre del titular ni el alias",
       "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre o su alias de Bizum. ¿Puede enviarlo?",
-      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique (Bankinter, Santander). Si el banco no lo ofrece, consulta a SAC.",
+      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique (Bankinter, Santander, ING). Si el banco no lo ofrece, consulta a SAC.",
       "estado": "derivado de la regla aprobada"
     },
     {
@@ -823,7 +823,7 @@ window.CONTENIDO = {
           "familia": "captura",
           "estado": "aprobado-fase1",
           "provisional": false,
-          "aviso_especifico": "La pantalla «Detalle de tarjeta» de la guía muestra solo los 4 últimos dígitos (****9350). La guía NO indica cómo ver el número completo en Bankinter, así que con esta pantalla no se cumple la regla de los 6 primeros dígitos. Si el cliente encuentra en su app la opción de ver el número completo, debe tapar los dígitos del medio antes de enviarlo; si no, consulta a SAC.",
+          "aviso_especifico": null,
           "pasos": [
             {
               "titulo": "Entra en «Mi Posición Global» y localiza la tarjeta",
@@ -1342,6 +1342,99 @@ window.CONTENIDO = {
             "captura": "bizum-caja-rural-navarra/4.jpg"
           },
           "verificacion_extra": [],
+          "faq": []
+        },
+        {
+          "id": "caixabank",
+          "nombre": "Caixabank",
+          "alias": [
+            "la caixa",
+            "caixa",
+            "caixabank",
+            "caixabanknow"
+          ],
+          "familia": "captura",
+          "estado": "aprobado",
+          "provisional": false,
+          "publicado": true,
+          "aviso_especifico": "La pantalla «Perfil de Bizum» muestra el nombre y apellidos, el teléfono móvil vinculado y la cuenta vinculada.",
+          "pasos": [
+            {
+              "titulo": "Abre la app de CaixaBank, inicia sesión y pulsa «Bizum»",
+              "detalle": "Con las claves habituales. El botón «Bizum» está en la pantalla de inicio.",
+              "captura": "bizum-caixabank/1.jpg"
+            },
+            {
+              "titulo": "Pulsa «Gestionar tus datos de Bizum»",
+              "detalle": "En «Otras opciones».",
+              "captura": "bizum-caixabank/2.jpg"
+            },
+            {
+              "titulo": "Haz una captura de «Perfil de Bizum»",
+              "detalle": "Aparecen todos los datos de Bizum.",
+              "captura": "bizum-caixabank/3.jpg"
+            }
+          ],
+          "resultado": {
+            "titulo": "Captura de «Perfil de Bizum»",
+            "descripcion": "Nombre y apellidos, teléfono móvil vinculado y cuenta vinculada.",
+            "captura": "bizum-caixabank/3.jpg"
+          },
+          "verificacion_extra": [],
+          "faq": []
+        },
+        {
+          "id": "ing",
+          "nombre": "ING",
+          "alias": [
+            "ing",
+            "ing direct"
+          ],
+          "familia": "captura",
+          "estado": "aprobado",
+          "provisional": false,
+          "publicado": true,
+          "aviso_especifico": "La pantalla final muestra el número de teléfono asociado a Bizum (solo los últimos dígitos). En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
+          "pasos": [
+            {
+              "titulo": "Abre la app de ING e inicia sesión",
+              "detalle": "Con las claves habituales.",
+              "captura": "bizum-ing/1.jpg"
+            },
+            {
+              "titulo": "Pulsa la barra de búsqueda «¿Cómo podemos ayudarte?»",
+              "detalle": "En la parte superior de la pantalla principal.",
+              "captura": "bizum-ing/2.jpg"
+            },
+            {
+              "titulo": "Escribe «Bizum consultar» y selecciona «bizum consultar»",
+              "detalle": "Entre las sugerencias que aparecen.",
+              "captura": "bizum-ing/3.jpg"
+            },
+            {
+              "titulo": "Pulsa «Consulta movimientos de Bizum»",
+              "detalle": "En «Acciones relacionadas».",
+              "captura": "bizum-ing/4.jpg"
+            },
+            {
+              "titulo": "Pulsa el engranaje de «Configuración»",
+              "detalle": null,
+              "captura": "bizum-ing/5.jpg"
+            },
+            {
+              "titulo": "Haz una captura de la pantalla con tus datos de Bizum",
+              "detalle": "Aparecen los datos asociados a Bizum.",
+              "captura": "bizum-ing/6.jpg"
+            }
+          ],
+          "resultado": {
+            "titulo": "Captura de los datos de Bizum",
+            "descripcion": "Número de teléfono asociado (últimos dígitos). Se acepta sin nombre ni alias.",
+            "captura": "bizum-ing/6.jpg"
+          },
+          "verificacion_extra": [
+            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
+          ],
           "faq": []
         }
       ]
