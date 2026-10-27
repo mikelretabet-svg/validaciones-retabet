@@ -63,6 +63,7 @@ async function cargaContenido(): Promise<void> {
   const medios = (json.medios ?? []).map((m: any) => ({
     id: m.id, nombre: m.nombre, regla: m.regla?.texto, frase_inicial: m.frase_inicial?.texto,
     verificacion: m.verificacion?.items, entrega_extra: m.entrega_extra, registro: m.registro,
+    principal: m.principal, secundaria: m.secundaria, datos: m.datos,
     bancos: (m.bancos ?? []).filter((b: any) => b.publicado !== false).map((b: any) => {
       ids.push(m.id + ":" + b.id);
       return {

@@ -68,8 +68,17 @@ header.app .asisbtn{margin-left:auto}
 .fam{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--lime-soft);color:var(--lime-ink);font-weight:bold}
 .hint{color:var(--muted);font-size:14px;margin:10px 0 0}
 /* Pestañas de medio de pago */
-.tabs{display:flex;gap:6px;margin:18px 0 0;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;width:max-content;max-width:100%}
-.tabs button{border:0;background:none;color:var(--fg);padding:10px 22px;border-radius:9px;font-size:16px;font-weight:bold}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0;padding:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;width:max-content;max-width:100%}
+.tabs button{border:0;background:none;color:var(--fg);padding:10px 18px;border-radius:9px;font-size:16px;font-weight:bold}
+/* Aviso fijo de ingresos sin verificar */
+.limite{margin:14px 0 0;padding:10px 14px;border-radius:10px;background:var(--lime-soft);border:1px solid var(--lime);font-size:15px}
+.limite b{color:var(--lime-ink)}
+/* Opciones del medio (foto, factura, YOID…) */
+.opcion{margin-top:14px}
+.opcion .nota{margin:12px 0 0;font-size:15px}
+h3.sub{font-size:17px;margin:22px 0 8px}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:12px 0 0;font-size:15px}
+.datos dt{color:var(--muted)} .datos dd{margin:0;font-weight:bold}
 .tabs button[aria-selected="true"]{background:var(--lime);color:var(--on-lime)}
 .medio{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--lime);color:var(--lime-ink);font-weight:bold}
 .empty{padding:20px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);text-align:center}
@@ -160,7 +169,7 @@ header.app .temabtn{padding:8px 12px;font-size:14px;margin-left:8px;flex:none}
   <header class="app">
     <button class="home" id="btnHome" aria-label="Inicio">
       <img class="logo" src="img/logo-retabet.jpg" alt="RETABET Sports &amp; Casino" width="130" height="52">
-      <div class="tit"><h1>Validaciones</h1><p>Titularidad de tarjeta y Bizum · Uso interno</p></div>
+      <div class="tit"><h1>Validaciones</h1><p>Titularidad del medio de pago · Uso interno</p></div>
     </button>
     <div class="ver" id="ver"></div>
     <button class="btn asisbtn" id="btnAsis" hidden>Asistente</button>
@@ -191,7 +200,7 @@ if (!C) {
   document.getElementById('app').innerHTML = '<div class="notice" style="margin-top:24px"><b>Falta contenido.js</b><span>No se ha podido cargar el contenido. Extrae el ZIP completo (Expand-Archive) y abre index.html desde la carpeta extraída, junto a contenido.js y la carpeta capturas.</span></div>';
   throw new Error('contenido.js no cargado');
 }
-const FAM = {captura:'Captura de pantalla', documento:'Documento del banco', asincrono:'Certificado · tras llamada', presencial:'En oficina del banco', agente:'Lo gestiona un agente'};
+const FAM = {captura:'Captura de pantalla', documento:'Documento del banco', asincrono:'Certificado · tras llamada', presencial:'En oficina del banco', agente:'Lo gestiona un agente', sin_nombre:'Sin nombre · pide factura'};
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 // Medios de pago (tarjeta, Bizum…). Cada uno tiene su regla, frase, comprobaciones y bancos.
 const MEDIOS = C.medios;
@@ -235,32 +244,51 @@ function pintaAcceso(){
   });
 }
 
-/* ---------- Pantalla 1: bancos ---------- */
+/* ---------- Pantalla 1: medio de pago (opciones y bancos) ---------- */
+// Bloque de una opción del medio: frase para el cliente, comprobaciones y nota.
+let nOpc = 0;
+function opcionHTML(o){
+  if (!o) return '';
+  const id = 'op' + (++nOpc);
+  return `<section class="blk opcion"><h3>${esc(o.titulo)}</h3><div class="body">
+    ${o.frase ? `<div class="say" id="${id}">${esc(o.frase)}</div><button class="copy" data-copy="${id}">⧉ Copiar frase</button>` : ''}
+    ${(o.comprobar||[]).length ? `<ul class="check" style="margin-top:12px">${o.comprobar.map(c => `<li><span class="box"></span><span>${esc(c)}</span></li>`).join('')}</ul>` : ''}
+    ${o.nota ? `<p class="nota">${esc(o.nota)}</p>` : ''}</div></section>`;
+}
 function pintaBancos(){
   setHash('');
   const M = medioDe(medioActual);
   const bancos = bancosDe(medioActual);
+  const haySit = C.situaciones.some(x => aplica(x, M.id));
   $('#app').innerHTML = `
+    ${C.general.sin_verificar ? `<div class="limite"><b>Hasta 150 €:</b> ${esc(C.general.sin_verificar.texto.replace(/^Ingresos de hasta 150 €: /,''))}</div>` : ''}
     <div class="tabs" role="tablist" aria-label="Medio de pago">${MEDIOS.map(x => `<button role="tab" data-medio="${x.id}" aria-selected="${x.id === medioActual}">${esc(x.nombre)}</button>`).join('')}</div>
-    <div class="search"><input id="q" type="search" placeholder="Escribe el banco del cliente (${esc(M.nombre)})" aria-label="Buscar banco"></div>
+    <div class="notice"><b>Regla</b><span>${esc(M.regla.texto)}${M.regla.ejemplo_numero ? ` Ejemplo: <b>${esc(M.regla.ejemplo_numero)}</b>` : ''}</span></div>
+    ${opcionHTML(M.principal)}
+    ${opcionHTML(M.secundaria)}
+    ${(M.datos||[]).length ? `<dl class="datos">${M.datos.map(d => `<dt>${esc(d[0])}</dt><dd>${esc(d[1])}</dd>`).join('')}</dl>` : ''}
+    ${bancos.length ? `
+    ${M.bancos_titulo ? `<h3 class="sub">${esc(M.bancos_titulo)}</h3>` : ''}
+    <div class="search"><input id="q" type="search" placeholder="Escribe el banco del cliente" aria-label="Buscar banco"></div>
     <div class="grid" id="grid"></div>
-    <p class="hint">Un toque abre la ficha. El buscador acepta nombres parciales y alias (por ejemplo «La Caixa» o «Rural Kutxa»).</p>
-    <div class="actions"><button class="btn prim" id="btnAsis2">Asistente de respuestas</button><button class="btn warnb" id="btnSit">No se puede completar</button></div>
-    <footer class="band">${esc(M.aviso_lista)}</footer>`;
-  const grid = $('#grid');
-  const pinta = q => {
-    q = norm(q.trim());
-    const list = bancos.filter(b => !q || norm(b.nombre).includes(q) || b.alias.some(a => norm(a).includes(q)));
-    grid.innerHTML = list.length ? list.map(b => `<button class="bank" data-id="${b.id}"><b>${esc(b.nombre)}</b><small>${esc(FAM[b.familia]||b.familia)}</small>${b.provisional?'<span class="tag">PROVISIONAL</span>':''}</button>`).join('')
-      : `<div class="empty">Ningún banco coincide. Si el cliente es de otro banco, consulta a SAC.</div>`;
-  };
-  pinta('');
-  $('#q').addEventListener('input', e => pinta(e.target.value));
-  grid.addEventListener('click', e => { const b = e.target.closest('.bank'); if (b) pintaFicha(bancos.find(x => x.id === b.dataset.id), medioActual); });
+    <p class="hint">Un toque abre la ficha con los pasos en la app del banco. El buscador acepta nombres parciales y alias (por ejemplo «La Caixa» o «Rural Kutxa»).</p>` : ''}
+    <div class="actions"><button class="btn prim" id="btnAsis2">Asistente de respuestas</button>${haySit ? '<button class="btn warnb" id="btnSit">No se puede completar</button>' : ''}</div>
+    ${M.aviso_lista ? `<footer class="band">${esc(M.aviso_lista)}</footer>` : ''}`;
+  if (bancos.length) {
+    const grid = $('#grid');
+    const pinta = q => {
+      q = norm(q.trim());
+      const list = bancos.filter(b => !q || norm(b.nombre).includes(q) || b.alias.some(a => norm(a).includes(q)));
+      grid.innerHTML = list.length ? list.map(b => `<button class="bank" data-id="${b.id}"><b>${esc(b.nombre)}</b><small>${esc(FAM[b.familia]||b.familia)}</small>${b.provisional?'<span class="tag">PROVISIONAL</span>':''}</button>`).join('')
+        : `<div class="empty">Ningún banco coincide. ${esc(M.aviso_lista || 'Consulta a SAC.')}</div>`;
+    };
+    pinta('');
+    $('#q').addEventListener('input', e => pinta(e.target.value));
+    grid.addEventListener('click', e => { const b = e.target.closest('.bank'); if (b) pintaFicha(bancos.find(x => x.id === b.dataset.id), medioActual); });
+  }
   document.querySelectorAll('.tabs [data-medio]').forEach(t => t.addEventListener('click', () => { medioActual = t.dataset.medio; pintaBancos(); }));
-  $('#btnSit').addEventListener('click', () => pintaSituaciones(null));
+  if (haySit) $('#btnSit').addEventListener('click', () => pintaSituaciones(null));
   $('#btnAsis2').addEventListener('click', pintaAsistente);
-  $('#q').focus();
 }
 
 /* ---------- Pantalla 2: ficha ---------- */
@@ -276,7 +304,7 @@ function pintaFicha(b, medio){
   const g = C.general;
   const checks = M.verificacion.items.concat(b.verificacion_extra || []);
   $('#app').innerHTML = `
-    <div class="crumbs"><button id="back">← Bancos</button><span>/</span><span>${esc(M.nombre)} · ${esc(b.nombre)}</span></div>
+    <div class="crumbs"><button id="back">← ${esc(M.nombre)}</button><span>/</span><span>${esc(b.nombre)}</span></div>
     <div class="fichahead"><h2>${esc(b.nombre)}</h2><span class="medio">${esc(M.nombre)}</span><span class="fam">${esc(FAM[b.familia]||b.familia)}</span>${b.provisional?'<span class="tag">PROVISIONAL</span>':''}<span class="meta">Contenido v${esc(C.meta.version_contenido)} · ${esc(C.meta.fecha)}</span></div>
     ${b.aviso_provisional?`<div class="notice"><b>Aviso</b><span>${esc(b.aviso_provisional)}</span></div>`:''}
     <div class="notice"><b>Regla</b><span>${esc(M.regla.texto)}${M.regla.ejemplo_numero ? ` Ejemplo: <b>${esc(M.regla.ejemplo_numero)}</b>` : ''}</span></div>
@@ -296,7 +324,7 @@ function pintaFicha(b, medio){
           <dt>Qué registras</dt><dd>${esc(M.registro)}</dd>
           <dt>Archivo</dt><dd>${esc(g.archivo.texto)}</dd>
           <dt>Si no se puede</dt><dd>${esc(g.escalado.texto)}</dd></dl>
-        <div class="actions"><button class="btn prim" id="done">Hecho · volver a bancos</button><button class="btn warnb" id="sit">No se puede completar</button></div></div></section>
+        <div class="actions"><button class="btn prim" id="done">Hecho · volver</button><button class="btn warnb" id="sit">No se puede completar</button></div></div></section>
     </div>
     <div class="faq"><h3>Respuestas al cliente</h3>${faqHTML((b.faq||[]).concat(C.faq_comunes.filter(f => aplica(f, M.id))))}</div>`;
   $('#back').addEventListener('click', pintaBancos);
@@ -309,7 +337,7 @@ function pintaFicha(b, medio){
 function pintaSituaciones(b){
   setHash('situaciones');
   $('#app').innerHTML = `
-    <div class="crumbs"><button id="back">← ${b?esc(b.nombre):'Bancos'}</button><span>/</span><span>No se puede completar</span></div>
+    <div class="crumbs"><button id="back">← ${b?esc(b.nombre):esc(medioDe(medioActual).nombre)}</button><span>/</span><span>No se puede completar</span></div>
     <h2 style="font-size:26px">No se puede completar</h2>
     <p class="hint">Elige la situación. Cada una tiene una frase para el cliente y un paso interno.</p>
     <p class="hint">Medio de pago: <b>${esc(medioDe(medioActual).nombre)}</b></p>
@@ -393,7 +421,7 @@ function bloqueRespuesta(clase, etiqueta, cliente, interno, fichas, extra, clase
 function pintaAsistente(){
   setHash('asistente');
   $('#app').innerHTML = `
-    <div class="crumbs"><button id="back">← Bancos</button><span>/</span><span>Asistente</span></div>
+    <div class="crumbs"><button id="back">← Volver</button><span>/</span><span>Asistente</span></div>
     <h2 style="font-size:26px">Asistente de respuestas</h2>
     <p class="hint">Pega el mensaje del cliente. Primero se buscan respuestas aprobadas; si no hay, la IA redacta un borrador usando solo el contenido de esta herramienta. <b>No pegues nombres, DNI ni números de tarjeta</b>: se tapan automáticamente, pero es mejor no incluirlos.</p>
     <form class="asis" id="fAsis">
@@ -422,7 +450,10 @@ async function responde(forzarIA){
   const texto = enmascara(bruto);
   // Medio: el seleccionado; si el mensaje habla de Bizum, Bizum.
   let medio = $('#medioSel').value;
-  if (palabras(texto).includes('bizum') && MEDIOS.some(x => x.id === 'bizum')) medio = 'bizum';
+  const pw = palabras(texto);
+  if (pw.includes('bizum') && MEDIOS.some(x => x.id === 'bizum')) medio = 'bizum';
+  else if (pw.some(w => w.startsWith('transferenc') || w === 'yoid') && MEDIOS.some(x => x.id === 'transferencia')) medio = 'transferencia';
+  else if (pw.includes('paypal') && MEDIOS.some(x => x.id === 'otros')) medio = 'otros';
   const selId = medio === $('#medioSel').value ? $('#bancoSel').value : '';
   const conMedio = b => Object.assign({}, b, {_medio: medio});
   const fichas = bancosEn(texto, medio).map(conMedio);

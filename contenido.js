@@ -3,7 +3,7 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.12",
+    "version_contenido": "1.13",
     "fecha": "2026-10-27",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
@@ -27,14 +27,18 @@ window.CONTENIDO = {
     "escalado": {
       "texto": "Si no puedes completar el procedimiento, abre incidencia a SAC por el canal habitual (sac@ekasa.net) indicando tienda, banco y motivo. No improvises pasos que no estén en la ficha.",
       "estado": "propuesta"
+    },
+    "sin_verificar": {
+      "texto": "Ingresos de hasta 150 €: se permite el ingreso sin verificar el medio de pago.",
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
     }
   },
   "situaciones": [
     {
       "id": "sin-app",
       "titulo": "El cliente no tiene la app ni acceso a banca online",
-      "cliente": "Sin acceso a su banca digital no podemos obtener el justificante ahora. Puede activarla con su banco o traer un certificado de titularidad de la tarjeta emitido por su oficina.",
-      "interno": "Abre incidencia a SAC (sac@ekasa.net) indicando tienda, banco y «cliente sin banca digital». Consulta a SAC si el certificado de la oficina bancaria es alternativa aceptada.",
+      "cliente": "No hay problema: puede enviarnos una foto de su tarjeta en la que se vean su nombre, los 6 primeros y los 4 últimos dígitos, con el CVV tapado.",
+      "interno": "Si la tarjeta no lleva el nombre impreso, consulta a SAC.",
       "estado": "propuesta",
       "medios": [
         "tarjeta"
@@ -46,8 +50,8 @@ window.CONTENIDO = {
         "bizum"
       ],
       "titulo": "El cliente no tiene acceso a su banca digital",
-      "cliente": "Sin acceso a su banca digital no podemos obtener ahora el justificante de Bizum. Puede activarla con su banco.",
-      "interno": "Abre incidencia a SAC (sac@ekasa.net) indicando tienda, banco y «cliente sin banca digital».",
+      "cliente": "No hay problema: puede enviarnos una factura de su teléfono en la que conste usted como titular.",
+      "interno": "Si tampoco tiene factura a su nombre, ofrece otro medio de pago.",
       "estado": "propuesta"
     },
     {
@@ -55,13 +59,17 @@ window.CONTENIDO = {
       "titulo": "La pantalla de su app no coincide con la guía",
       "cliente": "Las apps cambian con las actualizaciones. Busque la opción de detalle o datos de la tarjeta; si no la encuentra, lo consultamos y le avisamos.",
       "interno": "No improvises. Anota banco y, si puedes, versión de la app, y comunícalo a SAC para actualizar la ficha.",
-      "estado": "propuesta"
+      "estado": "propuesta",
+      "medios": [
+        "tarjeta",
+        "bizum"
+      ]
     },
     {
       "id": "no-cumple",
-      "titulo": "El justificante no cumple la regla (faltan dígitos, se ve el CVV, no aparece el nombre)",
-      "cliente": "Necesito que el justificante muestre su nombre y el número de la tarjeta con los 6 primeros y los 4 últimos dígitos visibles, el resto y el CVV tapados. ¿Puede repetirlo?",
-      "interno": "No aceptes ni reenvíes un justificante con el número completo o el CVV visible.",
+      "titulo": "La foto o el justificante no cumple la regla (faltan dígitos, se ve el CVV, no aparece el nombre)",
+      "cliente": "Necesito que se vean su nombre, los 6 primeros y los 4 últimos dígitos de la tarjeta, con el CVV tapado. El resto de dígitos puede taparlo. ¿Puede repetirlo?",
+      "interno": "No aceptes ni reenvíes una imagen con el CVV visible.",
       "estado": "derivado de la regla aprobada",
       "medios": [
         "tarjeta"
@@ -72,17 +80,20 @@ window.CONTENIDO = {
       "medios": [
         "bizum"
       ],
-      "titulo": "El justificante de Bizum no muestra el nombre del titular ni el alias",
-      "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre o su alias de Bizum. ¿Puede enviarlo?",
-      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique. Si el banco no lo ofrece, consulta a SAC.",
+      "titulo": "No aparece el nombre del titular o no coincide con el cliente",
+      "cliente": "Necesito una factura de su teléfono o un documento de su banco en el que conste usted como titular. Si no es posible, puede utilizar otro medio de pago.",
+      "interno": "Si el titular no coincide con el cliente, no se acepta: ofrece otro medio de pago.",
       "estado": "derivado de la regla aprobada"
     },
     {
       "id": "banco-no-listado",
       "titulo": "El banco del cliente no está en la lista",
-      "cliente": "Para su banco no tenemos aún el procedimiento. Lo consultamos y le indicamos cómo obtener el justificante.",
-      "interno": "No existe procedimiento validado. Abre incidencia a SAC con el nombre del banco.",
-      "estado": "propuesta"
+      "cliente": "Puede enviarnos una foto de su tarjeta en la que se vean su nombre, los 6 primeros y los 4 últimos dígitos, con el CVV tapado.",
+      "interno": "Si no puede, abre incidencia a SAC con el nombre del banco.",
+      "estado": "propuesta",
+      "medios": [
+        "tarjeta"
+      ]
     },
     {
       "id": "asincrono",
@@ -93,13 +104,43 @@ window.CONTENIDO = {
       "medios": [
         "tarjeta"
       ]
+    },
+    {
+      "id": "banco-no-listado-bizum",
+      "medios": [
+        "bizum"
+      ],
+      "titulo": "El banco del cliente no está en la lista",
+      "cliente": "Puede enviarnos una factura de su teléfono en la que conste usted como titular.",
+      "interno": "Si no tiene factura a su nombre, ofrece otro medio de pago.",
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+    },
+    {
+      "id": "yoid-falla",
+      "medios": [
+        "transferencia"
+      ],
+      "titulo": "YOID no funciona",
+      "cliente": "No hemos podido completar la verificación automática. Para continuar, necesito un certificado de titularidad de su cuenta bancaria emitido por su banco, a su nombre. Puede enviarlo a validaciones@retabet.es.",
+      "interno": "Comprueba que el certificado es del banco y que el titular coincide con el cliente.",
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+    },
+    {
+      "id": "importe-transferencia",
+      "medios": [
+        "transferencia"
+      ],
+      "titulo": "Transferencia inmediata fuera de límites",
+      "cliente": "Las transferencias inmediatas deben ser de un mínimo de 10 € y un máximo de 15.000 €.",
+      "interno": "Límites para transferencias inmediatas: 10 € – 15.000 €.",
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
     }
   ],
   "faq_comunes": [
     {
       "id": "donde-envio",
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat. Antes de enviarlo, tape los dígitos del medio del número de la tarjeta y el CVV si aparecen.",
+      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat. Antes de enviarlo, tape el CVV; los dígitos del medio también puede taparlos.",
       "interno": null,
       "estado": "aprobado por Mikel (26/10/2026)",
       "medios": [
@@ -112,7 +153,7 @@ window.CONTENIDO = {
         "bizum"
       ],
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat, tal y como lo genera su banco.",
+      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat, tal y como lo tiene.",
       "interno": null,
       "estado": "aprobado por Mikel (26/10/2026)"
     },
@@ -132,7 +173,7 @@ window.CONTENIDO = {
     },
     {
       "p": "«¿Os mando el número completo o el CVV para ir más rápido?»",
-      "r": "No. Nunca necesitamos el número completo, el CVV ni el PIN. Si aparecen, tápelos antes de enviar el justificante.",
+      "r": "No hace falta. Basta con que se vean su nombre, los 6 primeros y los 4 últimos dígitos. El CVV y el PIN nunca nos los envíe; tape el CVV antes de enviarlo.",
       "interno": null,
       "estado": "derivado de la regla aprobada",
       "id": "cvv-completo",
@@ -149,12 +190,22 @@ window.CONTENIDO = {
     },
     {
       "p": "«¿Vale una foto de la tarjeta física?»",
-      "r": "De momento necesitamos el justificante de la app o la web de su banco. Si no le es posible, lo consultamos.",
-      "interno": "Las guías solo contemplan app/web del banco. Consulta a SAC si se acepta la tarjeta física con nombre y 6+4 dígitos.",
-      "estado": "consulta a SAC",
+      "r": "Sí. Envíe una foto de la tarjeta en la que se vean su nombre, los 6 primeros y los 4 últimos dígitos. El resto de dígitos puede taparlo, y el CVV debe quedar tapado.",
+      "interno": null,
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)",
       "id": "foto-tarjeta",
       "medios": [
         "tarjeta"
+      ]
+    },
+    {
+      "id": "paypal",
+      "p": "«Con PayPal o la Tarjeta RETABET, ¿tengo que enviar algo?»",
+      "r": "No. Con PayPal y con la Tarjeta RETABET no necesitamos documentación adicional.",
+      "interno": null,
+      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)",
+      "medios": [
+        "otros"
       ]
     }
   ],
@@ -414,6 +465,26 @@ window.CONTENIDO = {
           "opcion"
         ]
       ]
+    },
+    {
+      "respuesta": "faq:paypal",
+      "patrones": [
+        [
+          "paypal"
+        ],
+        [
+          "tarjeta",
+          "retabet"
+        ]
+      ]
+    },
+    {
+      "respuesta": "sit:yoid-falla",
+      "patrones": [
+        [
+          "yoid"
+        ]
+      ]
     }
   ],
   "medios": [
@@ -422,29 +493,29 @@ window.CONTENIDO = {
       "nombre": "Tarjeta",
       "titulo": "Titularidad de tarjeta",
       "regla": {
-        "titulo": "Regla general del justificante",
-        "texto": "El justificante que entrega el cliente debe mostrar el nombre del titular y el número de la tarjeta con los 6 primeros y los 4 últimos dígitos visibles y los del medio tapados. El CVV debe estar tapado. Nunca se pide el PIN.",
+        "titulo": "Regla de la tarjeta",
+        "texto": "Deben verse el nombre del titular, los 6 primeros y los 4 últimos dígitos de la tarjeta. El resto de dígitos puede ir tapado. El CVV, siempre tapado. Nunca se pide el PIN.",
         "ejemplo_numero": "1234 56•• •••• 5678",
-        "estado": "aprobado por Mikel (26/10/2026: 6 primeros + 4 últimos)"
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones); CVV tapado se mantiene por seguridad"
       },
       "frase_inicial": {
-        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito un justificante de su banco en el que aparezca su nombre y el número de la tarjeta. No necesito el número completo: con los 6 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. Le indico cómo obtenerlo en su app.",
+        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito un justificante de su banco en el que aparezcan su nombre y el número de la tarjeta. Basta con que se vean los 6 primeros y los 4 últimos dígitos; el resto puede taparlo, y el CVV debe quedar tapado. Le indico cómo obtenerlo en su app.",
         "estado": "propuesta"
       },
       "verificacion": {
         "titulo": "Qué compruebas antes de dar por válido el justificante",
         "items": [
-          "El nombre del titular coincide con el documento de identidad del cliente.",
-          "Se ven los 6 primeros y los 4 últimos dígitos del número de tarjeta; los del medio están tapados.",
-          "Si la pantalla o el documento del banco no muestra los 6 primeros dígitos, el justificante no cumple la regla: consulta a SAC.",
+          "El nombre del titular coincide con el del cliente.",
+          "Se ven los 6 primeros y los 4 últimos dígitos del número de tarjeta. El resto puede estar tapado.",
+          "Si el justificante no muestra los 6 primeros dígitos, no cumple la regla: pide la foto de la tarjeta o consulta a SAC.",
           "No se ve el CVV. Si se ve, pide al cliente que lo tape y lo reenvíe.",
           "El justificante es de la app o web real del banco (cabecera, logotipo), no un recorte sin contexto."
         ],
         "estado": "items 1-3 derivados de la regla aprobada; item 4 propuesta"
       },
-      "entrega_extra": "Pídele que, antes de enviarlo, tape los dígitos del medio y el CVV si aparecen.",
+      "entrega_extra": "Pídele que tape el CVV antes de enviarlo; los dígitos del medio también puede taparlos.",
       "registro": "Anota en el sistema habitual que la titularidad queda acreditada, indicando banco y los 4 últimos dígitos de la tarjeta. No copies el número completo en ningún sitio. Si no sabes dónde registrarlo, consulta a SAC.",
-      "aviso_lista": "Si el banco del cliente no está en la lista, no existe procedimiento validado: consulta a SAC. Nunca pidas el número completo, el CVV ni el PIN.",
+      "aviso_lista": "Si el banco del cliente no está en la lista, pide la foto de la tarjeta. Nunca pidas el número completo, el CVV ni el PIN.",
       "bancos": [
         {
           "id": "santander",
@@ -456,7 +527,7 @@ window.CONTENIDO = {
           "familia": "captura",
           "estado": "aprobado-fase1",
           "provisional": false,
-          "aviso_especifico": "Para que se vean los 6 primeros dígitos hay que pulsar «Ver Nº tarjeta, CVV y caducidad», que muestra el número completo y también el CVV. Antes de enviar la captura, el cliente debe tapar los dígitos del medio y el CVV.",
+          "aviso_especifico": "Para que se vean los 6 primeros dígitos hay que pulsar «Ver Nº tarjeta, CVV y caducidad», que muestra el número completo y también el CVV. Antes de enviar la captura, el cliente debe tapar el CVV (los dígitos del medio también puede taparlos).",
           "pasos": [
             {
               "titulo": "Abre la app del Santander",
@@ -489,18 +560,18 @@ window.CONTENIDO = {
               "captura": "santander/2.jpg"
             },
             {
-              "titulo": "Haz una captura y tapa los dígitos del medio y el CVV antes de enviarla",
+              "titulo": "Haz una captura y tapa el CVV antes de enviarla",
               "detalle": "Deben verse el titular, los 6 primeros y los 4 últimos dígitos.",
               "captura": null
             }
           ],
           "resultado": {
             "titulo": "Captura «Detalle de tarjeta» con el número desplegado y tapado",
-            "descripcion": "Titular, número con los 6 primeros y los 4 últimos dígitos visibles (los del medio tapados por el cliente) y CVV tapado.",
+            "descripcion": "Titular, número con los 6 primeros y los 4 últimos dígitos visibles y CVV tapado.",
             "captura": "santander/2.jpg"
           },
           "verificacion_extra": [
-            "Confirma que el cliente ha tapado los dígitos del medio y el CVV. Si llega sin tapar, pídele que lo reenvíe tapado y no reenvíes tú la captura."
+            "Confirma que el cliente ha tapado el CVV. Si llega sin tapar, pídele que lo reenvíe tapado y no reenvíes tú la captura."
           ],
           "faq": [
             {
@@ -550,7 +621,7 @@ window.CONTENIDO = {
             "captura": "bbva/4.jpg"
           },
           "verificacion_extra": [
-            "Confirma que se ven los 6 primeros y los 4 últimos dígitos y que los del medio están tapados. Si la app no muestra los 6 primeros, consulta a SAC."
+            "Confirma que se ven los 6 primeros y los 4 últimos dígitos. Si la app no muestra los 6 primeros, pide la foto de la tarjeta."
           ],
           "faq": [],
           "publicado": true
@@ -627,7 +698,7 @@ window.CONTENIDO = {
           "familia": "captura",
           "estado": "aprobado-fase1",
           "provisional": false,
-          "aviso_especifico": "Para que se vean los 6 primeros dígitos hay que pulsar «Consultar número de tarjeta y CVV», que muestra el número completo y el CVV. Antes de enviar la captura, el cliente debe tapar los dígitos del medio y el CVV. La app aparece como «Rural Kutxa» en las capturas.",
+          "aviso_especifico": "Para que se vean los 6 primeros dígitos hay que pulsar «Consultar número de tarjeta y CVV», que muestra el número completo y el CVV. Antes de enviar la captura, el cliente debe tapar el CVV (los dígitos del medio también puede taparlos). La app aparece como «Rural Kutxa» en las capturas.",
           "pasos": [
             {
               "titulo": "Pulsa el icono de tarjetas",
@@ -650,7 +721,7 @@ window.CONTENIDO = {
               "captura": "caja-rural/3.jpg"
             },
             {
-              "titulo": "Haz una captura y tapa los dígitos del medio y el CVV antes de enviarla",
+              "titulo": "Haz una captura y tapa el CVV antes de enviarla",
               "detalle": "Deben verse el titular, los 6 primeros y los 4 últimos dígitos.",
               "captura": null
             }
@@ -661,7 +732,7 @@ window.CONTENIDO = {
             "captura": "caja-rural/3.jpg"
           },
           "verificacion_extra": [
-            "Confirma que el cliente ha tapado los dígitos del medio y el CVV. Si llega sin tapar, pídele que lo reenvíe tapado y no reenvíes tú la captura."
+            "Confirma que el cliente ha tapado el CVV. Si llega sin tapar, pídele que lo reenvíe tapado y no reenvíes tú la captura."
           ],
           "faq": [],
           "publicado": true
@@ -712,7 +783,7 @@ window.CONTENIDO = {
             "captura": null
           },
           "verificacion_extra": [
-            "Si el PDF muestra el número completo, aplica la regla general: pide al cliente que lo tape o acepta solo si los dígitos del medio están ocultos."
+            "Si el PDF muestra el número completo, el cliente puede tapar los dígitos del medio; el CVV no debe verse."
           ],
           "faq": [],
           "publicado": true
@@ -758,7 +829,7 @@ window.CONTENIDO = {
             "captura": "laboral-kutxa/4.jpg"
           },
           "verificacion_extra": [
-            "Si la numeración aparece completa, el cliente debe tapar los dígitos del medio."
+            "Si la numeración aparece completa, es válido; el cliente puede tapar los dígitos del medio si lo prefiere."
           ],
           "faq": [],
           "publicado": true
@@ -774,7 +845,7 @@ window.CONTENIDO = {
           "familia": "captura",
           "estado": "aprobado",
           "provisional": false,
-          "aviso_especifico": "La guía describe cómo ver el número completo, la caducidad y el CVV, y añade un paso para ver el PIN. El PIN NO se pide en ningún caso. El cliente debe tapar los dígitos del medio y el CVV antes de enviar la captura. La propia guía avisa de que en algunos dispositivos la pantalla no permite captura.",
+          "aviso_especifico": "La guía describe cómo ver el número completo, la caducidad y el CVV, y añade un paso para ver el PIN. El PIN NO se pide en ningún caso. El cliente debe tapar el CVV antes de enviar la captura (los dígitos del medio también puede taparlos). La propia guía avisa de que en algunos dispositivos la pantalla no permite captura.",
           "pasos": [
             {
               "titulo": "Abre la app de Banco Sabadell e inicia sesión",
@@ -797,7 +868,7 @@ window.CONTENIDO = {
               "captura": null
             },
             {
-              "titulo": "Haz una captura y tapa los dígitos del medio y el CVV antes de enviarla",
+              "titulo": "Haz una captura y tapa el CVV antes de enviarla",
               "detalle": "El PIN no se consulta: no acredita titularidad.",
               "captura": null
             }
@@ -808,7 +879,7 @@ window.CONTENIDO = {
             "captura": null
           },
           "verificacion_extra": [
-            "Confirma que CVV y dígitos del medio están tapados. Si no aparece el nombre del titular, usa «No se puede completar»."
+            "Confirma que el CVV está tapado. Si no aparece el nombre del titular, usa «No se puede completar»."
           ],
           "faq": [],
           "publicado": true
@@ -837,7 +908,7 @@ window.CONTENIDO = {
             },
             {
               "titulo": "Haz una captura de «Detalle de tarjeta»",
-              "detalle": "Deben verse el titular y el número con los 6 primeros y los 4 últimos dígitos (los del medio tapados).",
+              "detalle": "Deben verse el titular y el número con los 6 primeros y los 4 últimos dígitos (el resto puede ir tapado).",
               "captura": "bankinter/2.jpg"
             }
           ],
@@ -925,7 +996,7 @@ window.CONTENIDO = {
             },
             {
               "titulo": "Haz una captura y tapa los dígitos del medio antes de enviarla",
-              "detalle": "Deben verse los 6 primeros y los 4 últimos dígitos.",
+              "detalle": "Deben verse los 6 primeros y los 4 últimos dígitos; el resto puede ir tapado.",
               "captura": null
             }
           ],
@@ -1047,7 +1118,7 @@ window.CONTENIDO = {
           "familia": "documento",
           "estado": "aprobado-fase1",
           "provisional": false,
-          "aviso_especifico": "Según la propia app, el documento descargado incluye el número de tarjeta COMPLETO, la fecha de validez y el CVV. El cliente debe tapar los dígitos del medio y el CVV antes de enviarlo.",
+          "aviso_especifico": "Según la propia app, el documento descargado incluye el número de tarjeta COMPLETO, la fecha de validez y el CVV. El cliente debe tapar el CVV antes de enviarlo (los dígitos del medio también puede taparlos).",
           "pasos": [
             {
               "titulo": "Pulsa el icono de tarjetas",
@@ -1070,7 +1141,7 @@ window.CONTENIDO = {
               "captura": "revolut/4.jpg"
             },
             {
-              "titulo": "Pulsa «Descargar documento» y tapa los dígitos del medio y el CVV antes de enviarlo",
+              "titulo": "Pulsa «Descargar documento» y tapa el CVV antes de enviarlo",
               "detalle": null,
               "captura": "revolut/5.jpg"
             }
@@ -1081,7 +1152,7 @@ window.CONTENIDO = {
             "captura": "revolut/5.jpg"
           },
           "verificacion_extra": [
-            "Confirma que CVV y dígitos del medio están tapados. Si llega sin tapar, pide al cliente que lo reenvíe tapado y no reenvíes tú el documento."
+            "Confirma que el CVV está tapado. Si llega visible, pide al cliente que lo reenvíe tapado y no reenvíes tú el documento."
           ],
           "faq": [],
           "publicado": true
@@ -1122,7 +1193,7 @@ window.CONTENIDO = {
             },
             {
               "titulo": "Se abre el justificante con la titularidad de la tarjeta",
-              "detalle": "Envíalo con los dígitos del medio y el CVV tapados, si aparecen.",
+              "detalle": "Envíalo con el CVV tapado, si aparece.",
               "captura": null
             }
           ],
@@ -1132,7 +1203,7 @@ window.CONTENIDO = {
             "captura": null
           },
           "verificacion_extra": [
-            "La guía no muestra el justificante final: comprueba que aparecen el nombre del titular y los 6 primeros y 4 últimos dígitos. Si el número llega completo o con el CVV visible, pide al cliente que lo reenvíe tapado. Si no se ven los 6 primeros, consulta a SAC."
+            "La guía no muestra el justificante final: comprueba que aparecen el nombre del titular y los 6 primeros y 4 últimos dígitos. Si el CVV llega visible, pide al cliente que lo reenvíe tapado. Si no se ven los 6 primeros, pide la foto de la tarjeta."
           ],
           "faq": [],
           "publicado": true
@@ -1161,8 +1232,8 @@ window.CONTENIDO = {
               "captura": null
             },
             {
-              "titulo": "Envíanoslo con los dígitos del medio y el CVV tapados",
-              "detalle": "Deben verse los 6 primeros y los 4 últimos dígitos.",
+              "titulo": "Envíanoslo con el CVV tapado",
+              "detalle": "Deben verse los 6 primeros y los 4 últimos dígitos; el resto puede ir tapado.",
               "captura": null
             }
           ],
@@ -1172,7 +1243,7 @@ window.CONTENIDO = {
             "captura": null
           },
           "verificacion_extra": [
-            "Al recibirlo, aplica la regla general (nombre, 6 primeros y 4 últimos dígitos, sin CVV). Si no se ven los 6 primeros, consulta a SAC."
+            "Al recibirlo, aplica la regla general (nombre, 6 primeros y 4 últimos dígitos, sin CVV). Si no se ven los 6 primeros, pide la foto de la tarjeta."
           ],
           "faq": [
             {
@@ -1185,33 +1256,45 @@ window.CONTENIDO = {
           "publicado": true,
           "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito un justificante de su banco en el que aparezca su nombre y el número de la tarjeta. No necesito el número completo: con los 6 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. En Abanca este justificante se pide en persona en una oficina del banco."
         }
-      ]
+      ],
+      "principal": {
+        "titulo": "Opción 1 · Foto de la tarjeta",
+        "frase": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito una foto de su tarjeta en la que se vean su nombre, los 6 primeros y los 4 últimos dígitos. El resto de dígitos puede taparlo, y el CVV debe quedar tapado.",
+        "comprobar": [
+          "Se ve el nombre del titular y coincide con el del cliente.",
+          "Se ven los 6 primeros y los 4 últimos dígitos. El resto puede estar tapado.",
+          "No se ve el CVV. Si se ve, pide al cliente que lo tape y la reenvíe."
+        ],
+        "nota": "Si el cliente no puede enviar la foto (por ejemplo, su tarjeta no lleva el nombre impreso), usa la opción 2.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "bancos_titulo": "Opción 2 · Justificante de su banco"
     },
     {
       "id": "bizum",
       "nombre": "Bizum",
       "titulo": "Titularidad de Bizum",
       "regla": {
-        "titulo": "Regla del justificante de Bizum",
-        "texto": "Se acepta el justificante de Bizum tal y como lo genera el banco, sin tapar nada. Debe aparecer el nombre del titular o el alias de Bizum, salvo en los bancos cuya ficha indique otra cosa.",
-        "estado": "aprobado por Mikel (27/10/2026; excepción Bankinter y Santander)"
+        "titulo": "Regla de Bizum",
+        "texto": "Se pide una factura de teléfono en la que conste el titular, o un documento bancario que acredite la titularidad. El titular debe coincidir con el cliente. Si no coincide, ofrece al cliente otro medio de pago.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
       },
       "frase_inicial": {
-        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. Le indico cómo obtenerlo.",
+        "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito un documento de su banco en el que conste usted como titular (o una factura de su teléfono a su nombre). Le indico cómo obtenerlo.",
         "estado": "propuesta"
       },
       "verificacion": {
         "titulo": "Qué compruebas antes de dar por válido el justificante",
         "items": [
-          "Aparece el nombre del titular o el alias de Bizum, y corresponde al cliente.",
-          "Si no aparece ni el nombre del titular ni el alias, el justificante no cumple la regla (salvo excepción indicada en la ficha del banco): consulta a SAC.",
-          "El justificante es el que genera la app o la web real del banco, sin recortes ni modificaciones."
+          "Aparece el nombre del titular y coincide con el del cliente.",
+          "Si no aparece el nombre o no coincide, no es válido: ofrece al cliente otro medio de pago.",
+          "El documento es original (del banco o de la compañía de teléfono), sin recortes ni modificaciones."
         ],
         "estado": "items 1-2 derivados de la regla aprobada; item 3 propuesta"
       },
-      "entrega_extra": "Lo envía tal y como lo genera su banco, sin tapar nada.",
-      "registro": "Anota en el sistema habitual que la titularidad del Bizum queda acreditada, indicando el banco. Si no sabes dónde registrarlo, consulta a SAC.",
-      "aviso_lista": "Solo hay guía de Bizum para estos bancos. Si el banco del cliente no está, no existe procedimiento validado: consulta a SAC.",
+      "entrega_extra": "Lo envía tal y como lo tiene, sin tapar nada.",
+      "registro": "Anota en el sistema habitual que la titularidad del Bizum queda acreditada, indicando si fue con factura de teléfono o con documento del banco. Si no sabes dónde registrarlo, consulta a SAC.",
+      "aviso_lista": "Si el banco del cliente no está en la lista, pide la factura de teléfono a su nombre.",
       "bancos": [
         {
           "id": "kutxabank",
@@ -1258,12 +1341,26 @@ window.CONTENIDO = {
             "bk",
             "bankinter"
           ],
-          "familia": "captura",
+          "familia": "sin_nombre",
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": "La pantalla «Configurar mi perfil» muestra el teléfono, la cuenta vinculada y el estado de Bizum. En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
+          "aviso_especifico": "La pantalla de Bizum de este banco solo muestra el teléfono y la cuenta, así que no sirve. Pide la factura de teléfono a su nombre.",
           "pasos": [
+            {
+              "titulo": "Pide la factura de su teléfono en la que conste como titular",
+              "detalle": "O cualquier otro documento de su banco que acredite la titularidad.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Factura de teléfono o documento del banco a nombre del cliente",
+            "descripcion": "La pantalla de Bizum de la app de este banco no muestra el nombre del titular.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [],
+          "pasos_app_sin_nombre": [
             {
               "titulo": "Entra en «Mi Posición Global» y pulsa «Pagar»",
               "detalle": "En la parte inferior izquierda de la app.",
@@ -1285,15 +1382,12 @@ window.CONTENIDO = {
               "captura": "bizum-bankinter/4.jpg"
             }
           ],
-          "resultado": {
+          "resultado_app_sin_nombre": {
             "titulo": "Captura de «Configurar Bizum»",
             "descripcion": "Teléfono (últimos dígitos), cuenta vinculada, estado, compra online y Bizum Pay. Se acepta sin nombre ni alias.",
             "captura": "bizum-bankinter/4.jpg"
           },
-          "verificacion_extra": [
-            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
-          ],
-          "faq": []
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad."
         },
         {
           "id": "santander",
@@ -1302,12 +1396,26 @@ window.CONTENIDO = {
             "banco santander",
             "santander"
           ],
-          "familia": "captura",
+          "familia": "sin_nombre",
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": "La pantalla de configuración de Bizum muestra el móvil asociado (solo los últimos dígitos) y la cuenta de abono. En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
+          "aviso_especifico": "La pantalla de Bizum de este banco solo muestra el móvil y la cuenta, así que no sirve. Pide la factura de teléfono a su nombre.",
           "pasos": [
+            {
+              "titulo": "Pide la factura de su teléfono en la que conste como titular",
+              "detalle": "O cualquier otro documento de su banco que acredite la titularidad.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Factura de teléfono o documento del banco a nombre del cliente",
+            "descripcion": "La pantalla de Bizum de la app de este banco no muestra el nombre del titular.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [],
+          "pasos_app_sin_nombre": [
             {
               "titulo": "Abre la app del Santander e inicia sesión",
               "detalle": "Con las claves habituales.",
@@ -1344,15 +1452,12 @@ window.CONTENIDO = {
               "captura": "bizum-santander/6.jpg"
             }
           ],
-          "resultado": {
+          "resultado_app_sin_nombre": {
             "titulo": "Captura de la configuración de Bizum",
             "descripcion": "Móvil asociado al servicio (últimos dígitos) y cuenta de abono. Se acepta sin nombre ni alias.",
             "captura": "bizum-santander/6.jpg"
           },
-          "verificacion_extra": [
-            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
-          ],
-          "faq": []
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad."
         },
         {
           "id": "sabadell",
@@ -1362,12 +1467,26 @@ window.CONTENIDO = {
             "banc sabadell",
             "sabadell"
           ],
-          "familia": "captura",
+          "familia": "sin_nombre",
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": "La pantalla «Configuración» muestra el alias de Bizum («el nombre que se muestra cuando utilizas Bizum»), el teléfono vinculado y la cuenta. El alias se acepta como nombre.",
+          "aviso_especifico": "La pantalla de Bizum de este banco muestra el alias, no el nombre, así que no sirve. Pide la factura de teléfono a su nombre.",
           "pasos": [
+            {
+              "titulo": "Pide la factura de su teléfono en la que conste como titular",
+              "detalle": "O cualquier otro documento de su banco que acredite la titularidad.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Factura de teléfono o documento del banco a nombre del cliente",
+            "descripcion": "La pantalla de Bizum de la app de este banco no muestra el nombre del titular.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [],
+          "pasos_app_sin_nombre": [
             {
               "titulo": "Pulsa las tres líneas",
               "detalle": "Arriba a la derecha en la app de Banco Sabadell.",
@@ -1389,13 +1508,12 @@ window.CONTENIDO = {
               "captura": "bizum-sabadell/3.jpg"
             }
           ],
-          "resultado": {
+          "resultado_app_sin_nombre": {
             "titulo": "Captura de «Configuración» de Bizum",
             "descripcion": "Alias, número de teléfono vinculado y cuenta con la que opera.",
             "captura": "bizum-sabadell/3.jpg"
           },
-          "verificacion_extra": [],
-          "faq": []
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad."
         },
         {
           "id": "caja-rural-navarra",
@@ -1408,12 +1526,26 @@ window.CONTENIDO = {
             "ruralvia",
             "rural"
           ],
-          "familia": "captura",
+          "familia": "sin_nombre",
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": "La pantalla «Perfil Bizum» muestra el alias, el número de móvil y la cuenta asociada. El alias se acepta como nombre.",
+          "aviso_especifico": "La pantalla de Bizum de este banco muestra el alias, no el nombre, así que no sirve. Pide la factura de teléfono a su nombre.",
           "pasos": [
+            {
+              "titulo": "Pide la factura de su teléfono en la que conste como titular",
+              "detalle": "O cualquier otro documento de su banco que acredite la titularidad.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Factura de teléfono o documento del banco a nombre del cliente",
+            "descripcion": "La pantalla de Bizum de la app de este banco no muestra el nombre del titular.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [],
+          "pasos_app_sin_nombre": [
             {
               "titulo": "Abre la app y pulsa «Bizum»",
               "detalle": "En la barra inferior.",
@@ -1435,13 +1567,12 @@ window.CONTENIDO = {
               "captura": "bizum-caja-rural-navarra/4.jpg"
             }
           ],
-          "resultado": {
+          "resultado_app_sin_nombre": {
             "titulo": "Captura de «Perfil Bizum»",
             "descripcion": "Alias, número de móvil y cuenta asociada.",
             "captura": "bizum-caja-rural-navarra/4.jpg"
           },
-          "verificacion_extra": [],
-          "faq": []
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad."
         },
         {
           "id": "caixabank",
@@ -1489,12 +1620,26 @@ window.CONTENIDO = {
             "ing",
             "ing direct"
           ],
-          "familia": "captura",
+          "familia": "sin_nombre",
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": null,
+          "aviso_especifico": "La pantalla de Bizum de este banco solo muestra el teléfono y la cuenta, así que no sirve. Pide la factura de teléfono a su nombre.",
           "pasos": [
+            {
+              "titulo": "Pide la factura de su teléfono en la que conste como titular",
+              "detalle": "O cualquier otro documento de su banco que acredite la titularidad.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Factura de teléfono o documento del banco a nombre del cliente",
+            "descripcion": "La pantalla de Bizum de la app de este banco no muestra el nombre del titular.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [],
+          "pasos_app_sin_nombre": [
             {
               "titulo": "Abre la app de ING e inicia sesión",
               "detalle": "Con las claves habituales.",
@@ -1526,16 +1671,12 @@ window.CONTENIDO = {
               "captura": "bizum-ing/6.jpg"
             }
           ],
-          "resultado": {
+          "resultado_app_sin_nombre": {
             "titulo": "Captura de los datos de Bizum",
             "descripcion": "Número de teléfono asociado a Bizum (últimos dígitos) y cuenta.",
             "captura": "bizum-ing/6.jpg"
           },
-          "verificacion_extra": [
-            "En ING esta pantalla es el justificante válido: no hace falta que aparezcan el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app de ING."
-          ],
-          "faq": [],
-          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco. Le indico cómo obtenerlo."
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad."
         },
         {
           "id": "abanca",
@@ -1558,7 +1699,7 @@ window.CONTENIDO = {
             },
             {
               "titulo": "Pide un justificante de los datos de tu Bizum",
-              "detalle": "Debe aparecer tu nombre o tu alias de Bizum.",
+              "detalle": "Debe aparecer tu nombre como titular.",
               "captura": null
             },
             {
@@ -1581,7 +1722,7 @@ window.CONTENIDO = {
               "estado": "consulta a SAC"
             }
           ],
-          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. En Abanca este justificante se pide en persona en una oficina del banco."
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito un documento de su banco en el que conste usted como titular (o una factura de su teléfono a su nombre). En Abanca el documento del banco se pide en persona en una oficina."
         },
         {
           "id": "laboral-kutxa",
@@ -1630,9 +1771,92 @@ window.CONTENIDO = {
               "estado": "consulta a SAC"
             }
           ],
-          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. En Laboral Kutxa se solicita desde la app para que lo gestione un agente del banco; cuando se lo envíen, nos lo reenvía."
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito un documento de su banco en el que conste usted como titular (o una factura de su teléfono a su nombre). En Laboral Kutxa se solicita desde la app para que lo gestione un agente del banco; cuando se lo envíen, nos lo reenvía."
         }
-      ]
+      ],
+      "principal": {
+        "titulo": "Opción 1 · Factura de teléfono",
+        "frase": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito una factura de su teléfono en la que conste usted como titular, o un documento de su banco que acredite la titularidad.",
+        "comprobar": [
+          "En la factura consta el nombre del titular y coincide con el del cliente.",
+          "Si no coincide, no es válida: ofrece al cliente otro medio de pago."
+        ],
+        "nota": "Si el cliente prefiere un documento de su banco, usa la opción 2.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "bancos_titulo": "Opción 2 · Documento de su banco"
+    },
+    {
+      "id": "transferencia",
+      "nombre": "Transferencia",
+      "titulo": "Titularidad de la cuenta (transferencia)",
+      "regla": {
+        "titulo": "Regla de la transferencia",
+        "texto": "La verificación se hace mediante YOID. Si YOID no funciona, se pide un certificado de titularidad bancaria.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "principal": {
+        "titulo": "Opción 1 · Verificación con YOID",
+        "frase": null,
+        "comprobar": [],
+        "nota": "Cómo se lanza la verificación con YOID: NO ESPECIFICADO EN LA DOCUMENTACIÓN (consulta a SAC). Si YOID no funciona, usa la opción 2.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "secundaria": {
+        "titulo": "Opción 2 · Certificado de titularidad bancaria",
+        "frase": "No hemos podido completar la verificación automática. Para continuar, necesito un certificado de titularidad de su cuenta bancaria emitido por su banco, a su nombre.",
+        "comprobar": [
+          "El certificado es del banco y en él consta el cliente como titular.",
+          "Si no coincide con el cliente, no es válido: consulta a SAC."
+        ],
+        "nota": "El cliente lo envía a validaciones@retabet.es.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "datos": [
+        [
+          "Transferencias inmediatas",
+          "Mínimo 10 € · máximo 15.000 €"
+        ]
+      ],
+      "frase_inicial": {
+        "texto": "",
+        "estado": "no aplica"
+      },
+      "verificacion": {
+        "items": []
+      },
+      "entrega_extra": "",
+      "registro": "",
+      "aviso_lista": "",
+      "bancos": []
+    },
+    {
+      "id": "otros",
+      "nombre": "PayPal y Tarjeta RETABET",
+      "titulo": "PayPal y Tarjeta RETABET",
+      "regla": {
+        "titulo": "Regla",
+        "texto": "PayPal y la Tarjeta RETABET no requieren documentación adicional.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "principal": {
+        "titulo": "No requieren documentación",
+        "frase": null,
+        "comprobar": [],
+        "nota": "PayPal y Tarjeta RETABET: OK, no hay que pedir nada al cliente.",
+        "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      },
+      "frase_inicial": {
+        "texto": "",
+        "estado": "no aplica"
+      },
+      "verificacion": {
+        "items": []
+      },
+      "entrega_extra": "",
+      "registro": "",
+      "aviso_lista": "",
+      "bancos": []
     }
   ]
 };
