@@ -33,7 +33,7 @@ Código de acceso: el comunicado por SAC (constante `CODIGO_ACCESO` al principio
 
 ## Limitaciones conocidas (v1)
 - El código de acceso está en el cliente: solo disuade; la URL es pública. Se sustituye por Duo SSO al migrar a Ekasa.
-- Los textos generales (frase inicial, canal verificaciones@retabet.es, escalado a SAC, plazo de archivo) son propuestas pendientes de confirmación por Compliance/DPO.
+- Los textos generales (frase inicial, canal validaciones@retabet.es, escalado a SAC, plazo de archivo) son propuestas pendientes de confirmación por Compliance/DPO.
 - Sabadell se publica como provisional (sin capturas). Openbank, N26 e Imagin tienen puntos marcados «consulta a SAC».
 - No registra búsquedas fallidas. La función del asistente solo registra un contador anónimo por consulta.
 

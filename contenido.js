@@ -3,17 +3,17 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.6",
-    "fecha": "2026-10-26",
+    "version_contenido": "1.7",
+    "fecha": "2026-10-27",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
   },
   "general": {
     "entrega": {
       "texto": "El cliente envía el justificante por correo electrónico o por el chat habitual. Indícale la dirección.",
-      "direccion": "verificaciones@retabet.es",
-      "nota_interna": "Canal confirmado por Mikel (26/10/2026): verificaciones@retabet.es.",
-      "estado": "aprobado por Mikel (26/10/2026)"
+      "direccion": "validaciones@retabet.es",
+      "nota_interna": "Canal confirmado por Mikel (27/10/2026): validaciones@retabet.es.",
+      "estado": "aprobado por Mikel (27/10/2026)"
     },
     "registro": {
       "texto": "Según el medio de pago (ver cada ficha).",
@@ -21,7 +21,7 @@ window.CONTENIDO = {
     },
     "archivo": {
       "texto": "El justificante se archiva según el procedimiento interno de protección de datos y se elimina cumplido el plazo de conservación. No lo guardes en el móvil ni en el equipo de la tienda.",
-      "nota_interna": "Propuesta de plazo: 2 meses, alineado con la retención en estudio para verificaciones@retabet.es. Confirmar con DPO.",
+      "nota_interna": "Propuesta de plazo: 2 meses, alineado con la retención en estudio para validaciones@retabet.es. Confirmar con DPO.",
       "estado": "propuesta"
     },
     "escalado": {
@@ -74,7 +74,7 @@ window.CONTENIDO = {
       ],
       "titulo": "El justificante de Bizum no muestra el nombre del titular ni el alias",
       "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre o su alias de Bizum. ¿Puede enviarlo?",
-      "interno": "Sin nombre ni alias no se cumple la regla. Si el banco no lo ofrece, consulta a SAC.",
+      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique (Bankinter, Santander). Si el banco no lo ofrece, consulta a SAC.",
       "estado": "derivado de la regla aprobada"
     },
     {
@@ -99,7 +99,7 @@ window.CONTENIDO = {
     {
       "id": "donde-envio",
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a verificaciones@retabet.es o por este mismo chat. Antes de enviarlo, tape los dígitos del medio del número de la tarjeta y el CVV si aparecen.",
+      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat. Antes de enviarlo, tape los dígitos del medio del número de la tarjeta y el CVV si aparecen.",
       "interno": null,
       "estado": "aprobado por Mikel (26/10/2026)",
       "medios": [
@@ -112,7 +112,7 @@ window.CONTENIDO = {
         "bizum"
       ],
       "p": "«¿Dónde os lo mando?»",
-      "r": "Puede enviarlo por correo a verificaciones@retabet.es o por este mismo chat, tal y como lo genera su banco.",
+      "r": "Puede enviarlo por correo a validaciones@retabet.es o por este mismo chat, tal y como lo genera su banco.",
       "interno": null,
       "estado": "aprobado por Mikel (26/10/2026)"
     },
@@ -1096,8 +1096,8 @@ window.CONTENIDO = {
       "titulo": "Titularidad de Bizum",
       "regla": {
         "titulo": "Regla del justificante de Bizum",
-        "texto": "Se acepta el justificante de Bizum tal y como lo genera el banco, sin tapar nada. Debe aparecer el nombre del titular o el alias de Bizum.",
-        "estado": "aprobado por Mikel (26/10/2026; alias aceptado como nombre)"
+        "texto": "Se acepta el justificante de Bizum tal y como lo genera el banco, sin tapar nada. Debe aparecer el nombre del titular o el alias de Bizum, salvo en los bancos cuya ficha indique otra cosa.",
+        "estado": "aprobado por Mikel (27/10/2026; excepción Bankinter y Santander)"
       },
       "frase_inicial": {
         "texto": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. Le indico cómo obtenerlo.",
@@ -1107,7 +1107,7 @@ window.CONTENIDO = {
         "titulo": "Qué compruebas antes de dar por válido el justificante",
         "items": [
           "Aparece el nombre del titular o el alias de Bizum, y corresponde al cliente.",
-          "Si no aparece ni el nombre del titular ni el alias, el justificante no cumple la regla: consulta a SAC.",
+          "Si no aparece ni el nombre del titular ni el alias, el justificante no cumple la regla (salvo excepción indicada en la ficha del banco): consulta a SAC.",
           "El justificante es el que genera la app o la web real del banco, sin recortes ni modificaciones."
         ],
         "estado": "items 1-2 derivados de la regla aprobada; item 3 propuesta"
@@ -1162,11 +1162,10 @@ window.CONTENIDO = {
             "bankinter"
           ],
           "familia": "captura",
-          "estado": "provisional",
-          "provisional": true,
+          "estado": "aprobado",
+          "provisional": false,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final no muestra ni el nombre del titular ni el alias de Bizum, y uno de los dos es obligatorio. Pendiente de una pantalla que lo muestre.",
-          "aviso_especifico": "La pantalla «Configurar mi perfil» muestra el teléfono, la cuenta vinculada y el estado de Bizum, pero ni el nombre del titular ni el alias. Con solo esa pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_especifico": "La pantalla «Configurar mi perfil» muestra el teléfono, la cuenta vinculada y el estado de Bizum. En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
           "pasos": [
             {
               "titulo": "Entra en «Mi Posición Global» y pulsa «Pagar»",
@@ -1191,11 +1190,11 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de «Configurar Bizum»",
-            "descripcion": "Teléfono (últimos dígitos), cuenta vinculada, estado, compra online y Bizum Pay. No aparecen el nombre del titular ni el alias.",
+            "descripcion": "Teléfono (últimos dígitos), cuenta vinculada, estado, compra online y Bizum Pay. Se acepta sin nombre ni alias.",
             "captura": "bizum-bankinter/4.jpg"
           },
           "verificacion_extra": [
-            "Esta pantalla no muestra ni el nombre del titular ni el alias: no cumple la regla por sí sola. Consulta a SAC."
+            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
           ],
           "faq": []
         },
@@ -1207,11 +1206,10 @@ window.CONTENIDO = {
             "santander"
           ],
           "familia": "captura",
-          "estado": "provisional",
-          "provisional": true,
+          "estado": "aprobado",
+          "provisional": false,
           "publicado": true,
-          "aviso_provisional": "Guía incompleta: la pantalla final no muestra ni el nombre del titular ni el alias de Bizum, y uno de los dos es obligatorio. Pendiente de una pantalla que lo muestre.",
-          "aviso_especifico": "La pantalla de configuración de Bizum muestra el móvil asociado (solo los últimos dígitos) y la cuenta de abono, pero ni el nombre del titular ni el alias. Con solo esta pantalla no se cumple la regla: consulta a SAC.",
+          "aviso_especifico": "La pantalla de configuración de Bizum muestra el móvil asociado (solo los últimos dígitos) y la cuenta de abono. En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
           "pasos": [
             {
               "titulo": "Abre la app del Santander e inicia sesión",
@@ -1251,11 +1249,11 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de la configuración de Bizum",
-            "descripcion": "Móvil asociado al servicio (últimos dígitos) y cuenta de abono. No aparecen el nombre del titular ni el alias.",
+            "descripcion": "Móvil asociado al servicio (últimos dígitos) y cuenta de abono. Se acepta sin nombre ni alias.",
             "captura": "bizum-santander/6.jpg"
           },
           "verificacion_extra": [
-            "Esta pantalla no muestra ni el nombre del titular ni el alias: no cumple la regla por sí sola. Consulta a SAC."
+            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
           ],
           "faq": []
         },
