@@ -1,7 +1,7 @@
 {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.7",
+    "version_contenido": "1.8",
     "fecha": "2026-10-27",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
@@ -770,9 +770,8 @@
             "bs"
           ],
           "familia": "captura",
-          "estado": "provisional",
-          "provisional": true,
-          "aviso_provisional": "Guía provisional: sin capturas y sin resultado definido en la documentación. Si la pantalla del cliente no coincide, usa «No se puede completar».",
+          "estado": "aprobado",
+          "provisional": false,
           "aviso_especifico": "La guía describe cómo ver el número completo, la caducidad y el CVV, y añade un paso para ver el PIN. El PIN NO se pide en ningún caso. El cliente debe tapar los dígitos del medio y el CVV antes de enviar la captura. La propia guía avisa de que en algunos dispositivos la pantalla no permite captura.",
           "pasos": [
             {
@@ -821,7 +820,7 @@
           ],
           "familia": "captura",
           "estado": "aprobado-fase1",
-          "provisional": true,
+          "provisional": false,
           "aviso_especifico": "La pantalla «Detalle de tarjeta» de la guía muestra solo los 4 últimos dígitos (****9350). La guía NO indica cómo ver el número completo en Bankinter, así que con esta pantalla no se cumple la regla de los 6 primeros dígitos. Si el cliente encuentra en su app la opción de ver el número completo, debe tapar los dígitos del medio antes de enviarlo; si no, consulta a SAC.",
           "pasos": [
             {
@@ -849,8 +848,7 @@
             "Si solo se ven los 4 últimos dígitos, el justificante no cumple la regla: consulta a SAC."
           ],
           "faq": [],
-          "publicado": true,
-          "aviso_provisional": "Guía incompleta para la regla de 6 + 4 dígitos: falta el paso para ver el número completo. Pendiente de actualizar la guía de Bankinter."
+          "publicado": true
         },
         {
           "id": "ing",
