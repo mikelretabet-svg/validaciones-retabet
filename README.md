@@ -1,6 +1,6 @@
 # Validaciones RETABET · Solicitud de datos de tarjeta
 
-Herramienta de consulta interna: qué justificante pedir al cliente para acreditar la titularidad de su medio de pago (tarjeta: 13 entidades; Bizum: 7), qué comprobar y qué hacer si no se puede completar.
+Herramienta de consulta interna: qué justificante pedir al cliente para acreditar la titularidad de su medio de pago (tarjeta: 15 entidades; Bizum: 9), qué comprobar y qué hacer si no se puede completar.
 
 ## Ficheros
 - `index.html` — interfaz y lógica. No contiene procedimientos.

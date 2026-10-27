@@ -191,7 +191,7 @@ if (!C) {
   document.getElementById('app').innerHTML = '<div class="notice" style="margin-top:24px"><b>Falta contenido.js</b><span>No se ha podido cargar el contenido. Extrae el ZIP completo (Expand-Archive) y abre index.html desde la carpeta extraída, junto a contenido.js y la carpeta capturas.</span></div>';
   throw new Error('contenido.js no cargado');
 }
-const FAM = {captura:'Captura de pantalla', documento:'Documento del banco', asincrono:'Certificado · tras llamada'};
+const FAM = {captura:'Captura de pantalla', documento:'Documento del banco', asincrono:'Certificado · tras llamada', presencial:'En oficina del banco', agente:'Lo gestiona un agente'};
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
 // Medios de pago (tarjeta, Bizum…). Cada uno tiene su regla, frase, comprobaciones y bancos.
 const MEDIOS = C.medios;
@@ -283,7 +283,7 @@ function pintaFicha(b, medio){
     ${b.aviso_especifico?`<div class="notice"><b>${esc(b.nombre)}</b><span>${esc(b.aviso_especifico)}</span></div>`:''}
     <div class="blocks">
       <section class="blk"><h3><span class="n">1</span>Qué le pides al cliente<span class="who">Trabajador</span></h3>
-        <div class="body"><div class="say" id="frase">${esc(M.frase_inicial.texto)}</div><button class="copy" data-copy="frase">⧉ Copiar frase</button></div></section>
+        <div class="body"><div class="say" id="frase">${esc(b.frase_inicial||M.frase_inicial.texto)}</div><button class="copy" data-copy="frase">⧉ Copiar frase</button></div></section>
       <section class="blk"><h3><span class="n">2</span>Pasos que hace el cliente en su banco<span class="who">Cliente</span></h3>
         <div class="body"><ol class="steps">${b.pasos.map(p => `<li><div class="t"><b>${esc(p.titulo)}</b>${p.detalle?`<span>${esc(p.detalle)}</span>`:''}</div>${thumb(p.captura, p.titulo)}</li>`).join('')}</ol>
         ${b.pasos.some(p=>p.captura)?'<p class="hint">Capturas de la guía original (cuentas de prueba). Un toque las amplía.</p>':'<p class="hint">Esta guía no tiene capturas.</p>'}</div></section>

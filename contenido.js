@@ -3,7 +3,7 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.9",
+    "version_contenido": "1.12",
     "fecha": "2026-10-27",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
@@ -74,7 +74,7 @@ window.CONTENIDO = {
       ],
       "titulo": "El justificante de Bizum no muestra el nombre del titular ni el alias",
       "cliente": "Necesito el justificante de Bizum que genera su banco en el que aparezca su nombre o su alias de Bizum. ¿Puede enviarlo?",
-      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique (Bankinter, Santander, ING). Si el banco no lo ofrece, consulta a SAC.",
+      "interno": "Sin nombre ni alias no se cumple la regla, salvo en los bancos cuya ficha lo indique. Si el banco no lo ofrece, consulta a SAC.",
       "estado": "derivado de la regla aprobada"
     },
     {
@@ -1085,6 +1085,105 @@ window.CONTENIDO = {
           ],
           "faq": [],
           "publicado": true
+        },
+        {
+          "id": "trade-republic",
+          "nombre": "Trade Republic",
+          "alias": [
+            "trade republic",
+            "trade",
+            "traderepublic",
+            "tr"
+          ],
+          "familia": "documento",
+          "estado": "aprobado-fase1",
+          "provisional": false,
+          "aviso_especifico": null,
+          "pasos": [
+            {
+              "titulo": "Pulsa el icono de perfil",
+              "detalle": "En la pantalla de inicio, arriba a la derecha.",
+              "captura": null
+            },
+            {
+              "titulo": "Pulsa «Certificados y Extractos»",
+              "detalle": "En el apartado «Servicios».",
+              "captura": "trade-republic/1.jpg"
+            },
+            {
+              "titulo": "Pulsa «Detalles de la cuenta»",
+              "detalle": "Primera opción de «Extractos de cuenta» (Confirmación de IBAN, BIC y tarjeta).",
+              "captura": "trade-republic/2.jpg"
+            },
+            {
+              "titulo": "Pulsa «Titularidad de la tarjeta»",
+              "detalle": "«Prueba de titularidad de la tarjeta». Según el idioma de la app, el título de la pantalla puede salir como «Account details».",
+              "captura": "trade-republic/3.jpg"
+            },
+            {
+              "titulo": "Se abre el justificante con la titularidad de la tarjeta",
+              "detalle": "Envíalo con los dígitos del medio y el CVV tapados, si aparecen.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Prueba de titularidad de la tarjeta (Trade Republic)",
+            "descripcion": "La guía no incluye imagen del justificante: NO ESPECIFICADO EN LA DOCUMENTACIÓN qué datos de la tarjeta muestra.",
+            "captura": null
+          },
+          "verificacion_extra": [
+            "La guía no muestra el justificante final: comprueba que aparecen el nombre del titular y los 6 primeros y 4 últimos dígitos. Si el número llega completo o con el CVV visible, pide al cliente que lo reenvíe tapado. Si no se ven los 6 primeros, consulta a SAC."
+          ],
+          "faq": [],
+          "publicado": true
+        },
+        {
+          "id": "abanca",
+          "nombre": "Abanca",
+          "alias": [
+            "abanca",
+            "banco abanca",
+            "novagalicia"
+          ],
+          "familia": "presencial",
+          "estado": "aprobado",
+          "provisional": false,
+          "aviso_especifico": "En Abanca el justificante no se obtiene desde la app: el cliente tiene que pedirlo en persona en una oficina de su banco. No sale de la tienda con el justificante.",
+          "pasos": [
+            {
+              "titulo": "Acude a una oficina de Abanca",
+              "detalle": "Solicitud presencial en la sucursal.",
+              "captura": null
+            },
+            {
+              "titulo": "Pide un justificante de titularidad de la tarjeta",
+              "detalle": "Debe aparecer tu nombre y el número de la tarjeta.",
+              "captura": null
+            },
+            {
+              "titulo": "Envíanoslo con los dígitos del medio y el CVV tapados",
+              "detalle": "Deben verse los 6 primeros y los 4 últimos dígitos.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Justificante de titularidad emitido en oficina (Abanca)",
+            "descripcion": "Contenido y formato NO ESPECIFICADOS EN LA DOCUMENTACIÓN.",
+            "captura": null
+          },
+          "verificacion_extra": [
+            "Al recibirlo, aplica la regla general (nombre, 6 primeros y 4 últimos dígitos, sin CVV). Si no se ven los 6 primeros, consulta a SAC."
+          ],
+          "faq": [
+            {
+              "p": "«¿Y mientras tanto qué pasa?»",
+              "r": "Cuando tenga el justificante del banco, envíenoslo y completamos la comprobación.",
+              "interno": "Consulta a SAC cómo queda la solicitud mientras el cliente no lo aporta.",
+              "estado": "consulta a SAC"
+            }
+          ],
+          "publicado": true,
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular de la tarjeta coincide con el titular de su cuenta en RETABET. Para ello necesito un justificante de su banco en el que aparezca su nombre y el número de la tarjeta. No necesito el número completo: con los 6 primeros y los 4 últimos dígitos es suficiente, y el CVV debe quedar tapado. En Abanca este justificante se pide en persona en una oficina del banco."
         }
       ]
     },
@@ -1394,7 +1493,7 @@ window.CONTENIDO = {
           "estado": "aprobado",
           "provisional": false,
           "publicado": true,
-          "aviso_especifico": "La pantalla final muestra el número de teléfono asociado a Bizum (solo los últimos dígitos). En este banco se acepta tal y como la genera el banco, aunque no aparezcan el nombre del titular ni el alias.",
+          "aviso_especifico": null,
           "pasos": [
             {
               "titulo": "Abre la app de ING e inicia sesión",
@@ -1429,13 +1528,109 @@ window.CONTENIDO = {
           ],
           "resultado": {
             "titulo": "Captura de los datos de Bizum",
-            "descripcion": "Número de teléfono asociado (últimos dígitos). Se acepta sin nombre ni alias.",
+            "descripcion": "Número de teléfono asociado a Bizum (últimos dígitos) y cuenta.",
             "captura": "bizum-ing/6.jpg"
           },
           "verificacion_extra": [
-            "Excepción: aquí no hace falta el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app del banco."
+            "En ING esta pantalla es el justificante válido: no hace falta que aparezcan el nombre ni el alias. Comprueba que es la pantalla real de Bizum de la app de ING."
           ],
-          "faq": []
+          "faq": [],
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco. Le indico cómo obtenerlo."
+        },
+        {
+          "id": "abanca",
+          "nombre": "Abanca",
+          "alias": [
+            "abanca",
+            "banco abanca",
+            "novagalicia"
+          ],
+          "familia": "presencial",
+          "estado": "aprobado",
+          "provisional": false,
+          "publicado": true,
+          "aviso_especifico": "En Abanca el justificante de Bizum no se obtiene desde la app: el cliente tiene que pedirlo en persona en una oficina de su banco. No sale de la tienda con el justificante.",
+          "pasos": [
+            {
+              "titulo": "Acude a una oficina de Abanca",
+              "detalle": "Solicitud presencial en la sucursal.",
+              "captura": null
+            },
+            {
+              "titulo": "Pide un justificante de los datos de tu Bizum",
+              "detalle": "Debe aparecer tu nombre o tu alias de Bizum.",
+              "captura": null
+            },
+            {
+              "titulo": "Envíanoslo tal y como te lo da el banco",
+              "detalle": "Sin tapar nada.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Justificante de Bizum emitido en oficina (Abanca)",
+            "descripcion": "Contenido y formato NO ESPECIFICADOS EN LA DOCUMENTACIÓN.",
+            "captura": null
+          },
+          "verificacion_extra": [],
+          "faq": [
+            {
+              "p": "«¿Y mientras tanto qué pasa?»",
+              "r": "Cuando tenga el justificante del banco, envíenoslo y completamos la comprobación.",
+              "interno": "Consulta a SAC cómo queda la solicitud mientras el cliente no lo aporta.",
+              "estado": "consulta a SAC"
+            }
+          ],
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. En Abanca este justificante se pide en persona en una oficina del banco."
+        },
+        {
+          "id": "laboral-kutxa",
+          "nombre": "Laboral Kutxa",
+          "alias": [
+            "laboral",
+            "lk",
+            "caja laboral",
+            "euskadiko kutxa"
+          ],
+          "familia": "agente",
+          "estado": "aprobado",
+          "provisional": false,
+          "publicado": true,
+          "aviso_especifico": "En Laboral Kutxa el justificante de Bizum no se descarga directamente: el cliente lo solicita desde la app y lo gestiona un agente del banco. Es posible que el banco se lo envíe por correo electrónico. No lo obtiene al momento.",
+          "pasos": [
+            {
+              "titulo": "Entra en la app de Laboral Kutxa",
+              "detalle": null,
+              "captura": null
+            },
+            {
+              "titulo": "Solicita que un agente gestione el justificante de tu Bizum",
+              "detalle": "Desde la propia app. El recorrido exacto dentro de la app NO ESTÁ ESPECIFICADO EN LA DOCUMENTACIÓN.",
+              "captura": null
+            },
+            {
+              "titulo": "Cuando lo recibas (posiblemente por correo), envíanoslo tal cual",
+              "detalle": "Sin tapar nada.",
+              "captura": null
+            }
+          ],
+          "resultado": {
+            "titulo": "Justificante de Bizum gestionado por un agente (Laboral Kutxa)",
+            "descripcion": "Contenido, formato y forma de envío NO ESPECIFICADOS EN LA DOCUMENTACIÓN (posiblemente por correo).",
+            "captura": null
+          },
+          "verificacion_extra": [
+            "Si el cliente reenvía el correo del banco, comprueba que el justificante viene del banco (adjunto o remitente de Laboral Kutxa)."
+          ],
+          "faq": [
+            {
+              "p": "«¿Y mientras tanto qué pasa?»",
+              "r": "Cuando tenga el justificante del banco, envíenoslo y completamos la comprobación.",
+              "interno": "Consulta a SAC cómo queda la solicitud mientras el cliente no lo aporta.",
+              "estado": "consulta a SAC"
+            }
+          ],
+          "frase_inicial": "Por normativa, a partir del 28 de octubre de 2026 estamos obligados a comprobar que el titular del medio de pago coincide con el titular de su cuenta en RETABET. Para ello necesito el justificante de Bizum que genera su banco, en el que aparezca su nombre o su alias de Bizum. En Laboral Kutxa se solicita desde la app para que lo gestione un agente del banco; cuando se lo envíen, nos lo reenvía."
         }
       ]
     }
