@@ -3,8 +3,8 @@
 window.CONTENIDO = {
   "meta": {
     "herramienta": "Validaciones RETABET",
-    "version_contenido": "1.13",
-    "fecha": "2026-10-27",
+    "version_contenido": "1.14",
+    "fecha": "2026-10-28",
     "estado": "publicado (textos generales en propuesta, pendientes marcados «consulta a SAC»)",
     "nota": "Los textos marcados con «propuesta» los ha redactado Claude a partir de las guías y del contexto de SAC; no son procedimiento oficial hasta que Mikel/Compliance los aprueben. Los pasos de cada banco son los de la guía Word original, con las correcciones editoriales aprobadas en la Fase 1."
   },
@@ -29,8 +29,8 @@ window.CONTENIDO = {
       "estado": "propuesta"
     },
     "sin_verificar": {
-      "texto": "Ingresos de hasta 150 €: se permite el ingreso sin verificar el medio de pago.",
-      "estado": "aprobado por Mikel (27/10/2026: nuevas instrucciones)"
+      "texto": "Ingresos de hasta 150 €: se permite el ingreso sin verificar el DNI en Estatal.",
+      "estado": "corregido por Mikel (28/10/2026): no es el medio de pago, es el DNI en Estatal"
     }
   },
   "situaciones": [
